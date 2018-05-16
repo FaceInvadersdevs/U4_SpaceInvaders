@@ -15,15 +15,14 @@ namespace U4_SpaceInvaders
     class Spaceship
     {
         Point playerPos = new Point();
-        int counter = 0;
         private Point point;
         public Point Point { get => point; }
         Canvas canvas;
         MainWindow window;
         Rectangle playerRectangle;
-        double dbl_playerpos;
-        string PlayerPosX;
-
+        ImageBrush sprite_F_MoveLeft = new ImageBrush(new BitmapImage(new Uri("Faceship_Move_Left.png", UriKind.Relative)));
+        ImageBrush sprite_F_MoveRight = new ImageBrush(new BitmapImage(new Uri("Faceship_Move_Right.png", UriKind.Relative)));
+        ImageBrush sprite_F_FaceShoot = new ImageBrush(new BitmapImage(new Uri("Faceship_Shoot.png", UriKind.Relative)));
         public Spaceship(Canvas c, MainWindow w)
         {
             //Generate Player
@@ -54,6 +53,7 @@ namespace U4_SpaceInvaders
 
         public void Tick()
         {
+            Globals.Spaceship_x = playerPos.X;
             if (Keyboard.IsKeyDown(Key.Left))
             {
                 if (Globals.blockleft == false)
@@ -63,6 +63,7 @@ namespace U4_SpaceInvaders
                     playerPos.X = playerPos.X - 2.5;
                     point.X = playerPos.X;
                     Canvas.SetLeft(playerRectangle, point.X);
+                    playerRectangle.Fill = sprite_F_MoveLeft;
                     if (playerPos.X <= 64)
                     {
                         Globals.blockleft = true;
@@ -87,7 +88,8 @@ namespace U4_SpaceInvaders
                     playerPos.X = playerPos.X + 2.5;
                     point.X = playerPos.X;
                     Canvas.SetLeft(playerRectangle, point.X);
-                    if (playerPos.X >= 600)
+                    playerRectangle.Fill = sprite_F_MoveRight;
+                    if (playerPos.X >= 536)
                     {
                         Globals.blockright = true;
 
@@ -95,11 +97,20 @@ namespace U4_SpaceInvaders
                 }
                 else if (Globals.blockright == true)
                 {
-                    if (playerPos.X < 600)
+                    if (playerPos.X < 536)
                     {
                         Globals.blockright = false;
 
                     }
+                }
+            }
+            if (Keyboard.IsKeyDown(Key.Space))
+            {
+                playerRectangle.Fill = sprite_F_FaceShoot;
+                int counter = 10;
+                if (counter == 20)
+                {
+                    MessageBox.Show ("Game over boi");
                 }
             }
         }
