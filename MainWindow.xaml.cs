@@ -54,6 +54,9 @@ namespace U4_SpaceInvaders
         public static bool blockright = false;
 
         public static int currentRound = 1;
+        public static int bulletcount;
+        public static double Spaceship_x;
+
 
         public static SoundPlayer musicPlayer = new SoundPlayer();
         public static MediaPlayer effectPlayer = new MediaPlayer();
@@ -72,8 +75,10 @@ namespace U4_SpaceInvaders
 
         System.Windows.Threading.DispatcherTimer gameTimer = new System.Windows.Threading.DispatcherTimer();
         Spaceship player;
+        Bullet bullet;
 
-
+        List<Bullet> bullets = new List<Bullet>();
+        List<SP1Aliens> sp1Aliens = new List<SP1Aliens>();
 
 
         public MainWindow()
@@ -127,7 +132,7 @@ namespace U4_SpaceInvaders
             ImageBrush sprite_F_AlienSP1 = new ImageBrush(new BitmapImage(new Uri("Alien SP1.png", UriKind.Relative)));
             ImageBrush sprite_F_AlienSP2 = new ImageBrush(new BitmapImage(new Uri("Alien SP2.png", UriKind.Relative)));
             ImageBrush sprite_F_AlienSP3 = new ImageBrush(new BitmapImage(new Uri("Alien SP3.png", UriKind.Relative)));
-            ImageBrush sprite_F_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Draxxor.png", UriKind.Relative)));
+            ImageBrush sprite_F_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Alien SP4.png", UriKind.Relative)));
             ImageBrush sprite_F_Spaceship = new ImageBrush(new BitmapImage(new Uri("Faceship.png", UriKind.Relative)));
 
             if (Globals.EasterEggActive == false)
@@ -278,6 +283,11 @@ namespace U4_SpaceInvaders
                 }
                 player.Tick();
 
+                foreach (Bullet b in bullets)
+                {
+                    b.Tick();
+                }
+
                 if (Keyboard.IsKeyDown(Key.Space))
                 {
                     if (Globals.isSpacePressed == false)
@@ -287,12 +297,15 @@ namespace U4_SpaceInvaders
                             Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
                             Globals.effectPlayer.Play();
                             Globals.isSpacePressed = true;
+                            CreateBullet();
                         }
                         else if (Globals.EasterEggActive == true)
                         {
                             Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
                             Globals.effectPlayer.Play();
                             Globals.isSpacePressed = true;
+                            CreateBullet();
+
                         }
                     }
                 }
@@ -328,6 +341,11 @@ namespace U4_SpaceInvaders
             {
                 this.Title = "Game Over!";
             }
+        }
+
+        public void CreateBullet()
+        {
+            bullets.Add(new Bullet(canvas_battleground, this));
         }
     }
 }

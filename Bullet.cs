@@ -13,6 +13,7 @@ namespace U4_SpaceInvaders
 {
     class Bullet
     {
+        Spaceship player;
         Point bulletPos = new Point();
         private Point point;
         public Point Point { get => point; }
@@ -25,7 +26,7 @@ namespace U4_SpaceInvaders
             //Generate Bullet
             canvas = c;
             window = w;
-            point = new Point(346, 558);
+            point = new Point(Globals.Spaceship_x, 558);
             bulletPos = point;
             bulletRectangle = new Rectangle();
             bulletRectangle.Fill = Brushes.Red;
