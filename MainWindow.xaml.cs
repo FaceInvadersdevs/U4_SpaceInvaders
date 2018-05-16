@@ -50,6 +50,8 @@ namespace U4_SpaceInvaders
         public static bool beginfade = false;
         public static bool isSpacePressed = false;
         public static bool playerCreated = false;
+        public static bool blockleft = false;
+        public static bool blockright = false;
 
         public static int currentRound = 1;
 
