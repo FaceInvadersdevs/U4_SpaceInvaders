@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Media;
@@ -52,11 +52,15 @@ namespace U4_SpaceInvaders
         public static bool playerCreated = false;
         public static bool blockleft = false;
         public static bool blockright = false;
+        public static bool areAliensCreated = false;
+        public static bool areAliensCreated2 = false;
 
         public static int currentRound = 1;
         public static int bulletcount;
         public static int movecooldown = 0;
         public static int shotcooldown = 0;
+        public static int SP1AliensCreated = 0;
+        public static int SP2AliensCreated = 0;
         public static double Spaceship_x;
 
 
@@ -81,6 +85,7 @@ namespace U4_SpaceInvaders
 
         List<Bullet> bullets = new List<Bullet>();
         List<SP1Aliens> sp1Aliens = new List<SP1Aliens>();
+        List<SP2Aliens> sp2Aliens = new List<SP2Aliens>();
 
 
         public MainWindow()
@@ -280,77 +285,105 @@ namespace U4_SpaceInvaders
                 canvas_battleground.Visibility = Visibility.Visible;
                 this.Title = "Round: " + Globals.currentRound.ToString();
 
+                // SP 1-4 Aliens below
+
                 ImageBrush sprite_battleBackground = new ImageBrush(new BitmapImage(new Uri("BattleBackground.png", UriKind.Relative)));
                 canvas_battleground.Background = sprite_battleBackground;
 
-
-                if (Globals.playerCreated == false)
+                if (Globals.areAliensCreated == false)
                 {
-                    CreatePlayer();
-                }
-                player.Tick();
-
-                foreach (Bullet b in bullets)
-                {
-                    b.Tick();
-                }
-
-                if (Keyboard.IsKeyDown(Key.Space))
-                {
-                    if (Globals.canShoot == false)
+                    for (int i = 0; i < 8; i++)
                     {
-                        if (Globals.EasterEggActive == false)
-                        {
-                            Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
-                            Globals.effectPlayer.Play();
-                            Globals.canShoot = true;
-                            CreateBullet();
-                        }
-                        else if (Globals.EasterEggActive == true)
-                        {
-                            Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
-                            Globals.effectPlayer.Play();
-                            CreateBullet();
-                            Globals.canShoot = true;
+                        sp1Aliens.Add(new SP1Aliens(canvas_battleground, this));
 
+                        if (Globals.SP1AliensCreated == 8)
+                        {
+                            Globals.areAliensCreated = true;
                         }
                     }
+
+
+
+
                 }
-                else if (Keyboard.IsKeyUp(Key.Space))
+                if (Globals.areAliensCreated2 == false)
                 {
-                    if (Globals.shotcooldown == 20)
+                    for (int i = 0; i < 8; i++)
                     {
-                        Globals.canShoot = false;
-                    }
-                }
+                        sp2Aliens.Add(new SP2Aliens(canvas_battleground, this));
 
-                if (Keyboard.IsKeyDown(Key.Enter))
-                {
-                    //setupGame();
-                    if (gameState == GameState.MainMenu)
+                        if (Globals.SP2AliensCreated == 8)
+                        {
+                            Globals.areAliensCreated2 = true;
+                        }
+                    }
+
+                    if (Globals.playerCreated == false)
                     {
-                        gameState = GameState.GameOn;
-                        Globals.musicPlaying = false;
+                        CreatePlayer();
                     }
-                    else if (gameState == GameState.GameOn)
+                    player.Tick();
+
+                    foreach (Bullet b in bullets)
                     {
-                        gameState = GameState.MainMenu;
-                        Globals.musicPlaying = false;
-
-                        player.destroy();
-                        Globals.playerCreated = false;
-
-                        canvas_battleground.Visibility = Visibility.Hidden;
+                        b.Tick();
                     }
-                }
 
-                if (Mouse.LeftButton == MouseButtonState.Pressed)
-                {
-                    Clipboard.SetText(Mouse.GetPosition(this).ToString());
+                    if (Keyboard.IsKeyDown(Key.Space))
+                    {
+                        if (Globals.canShoot == false)
+                        {
+                            if (Globals.EasterEggActive == false)
+                            {
+                                Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
+                                Globals.effectPlayer.Play();
+                                Globals.canShoot = true;
+                                CreateBullet();
+                            }
+                            else if (Globals.EasterEggActive == true)
+                            {
+                                Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
+                                Globals.effectPlayer.Play();
+                                CreateBullet();
+                                Globals.canShoot = true;
+
+                            }
+                        }
+                    }
+                    else if (Keyboard.IsKeyUp(Key.Space))
+                    {
+                        if (Globals.shotcooldown == 20)
+                        {
+                            Globals.canShoot = false;
+                        }
+                    }
+
+                    if (Keyboard.IsKeyDown(Key.Enter))
+                    {
+                        //setupGame();
+                        if (gameState == GameState.MainMenu)
+                        {
+                            gameState = GameState.GameOn;
+                            Globals.musicPlaying = false;
+                        }
+                        else if (gameState == GameState.GameOn)
+                        {
+                            gameState = GameState.MainMenu;
+                            Globals.musicPlaying = false;
+
+                            player.destroy();
+                            Globals.playerCreated = false;
+
+                            canvas_battleground.Visibility = Visibility.Hidden;
+                        }
+                    }
+
+                    if (Mouse.LeftButton == MouseButtonState.Pressed)
+                    {
+                        Clipboard.SetText(Mouse.GetPosition(this).ToString());
+                    }
                 }
             }
-
-
 
             else if (gameState == GameState.GameOver)
             {
