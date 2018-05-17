@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace U4_SpaceInvaders
 {
-    class SP1Aliens
+    class SP2Aliens
     {
         //Generate Player Variables
         Point AlienPos = new Point();
@@ -19,7 +19,7 @@ namespace U4_SpaceInvaders
         public Point Point { get => point; }
         Canvas canvas;
         MainWindow window;
-        Rectangle AlienRectangle;
+        Rectangle AlienRectangle2;
 
 
         //Create Sprites
@@ -33,30 +33,32 @@ namespace U4_SpaceInvaders
         ImageBrush sprite_BigRed = new ImageBrush(new BitmapImage(new Uri("Draxxor.png", UriKind.Relative)));
         ImageBrush sprite_LittleRed = new ImageBrush(new BitmapImage(new Uri("Draconus.png", UriKind.Relative)));
 
-        public SP1Aliens(Canvas c, MainWindow w)
+        public SP2Aliens(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
-            point = new Point((64 * Globals.SP1AliensCreated), 0);
+            point = new Point((64 * Globals.SP2AliensCreated), 64);
             AlienPos = point;
-            AlienRectangle = new Rectangle();
-            AlienRectangle.Fill = Brushes.Green;
-            AlienRectangle.Height = 64;
-            AlienRectangle.Width = 64;
-            canvas.Children.Add(AlienRectangle);
-            Canvas.SetTop(AlienRectangle, point.Y);
-            Canvas.SetLeft(AlienRectangle, point.X);
-            Globals.SP1AliensCreated++;
+            AlienRectangle2 = new Rectangle
+            {
+                Fill = Brushes.Green,
+                Height = 64,
+                Width = 64
+            };
+            canvas.Children.Add(AlienRectangle2);
+            Canvas.SetTop(AlienRectangle2, point.Y);
+            Canvas.SetLeft(AlienRectangle2, point.X);
+            Globals.SP2AliensCreated++;
 
             //Sprites
             if (Globals.EasterEggActive == false)
             {
-                AlienRectangle.Fill = sprite_LittleGreen;
+                AlienRectangle2.Fill = sprite_BigGreen;
             }
             else if (Globals.EasterEggActive == true)
             {
-                AlienRectangle.Fill = sprite_SP1alien;
+                AlienRectangle2.Fill = sprite_SP2alien;
             }
 
         }
@@ -67,12 +69,4 @@ namespace U4_SpaceInvaders
     }
 
 }
-
-
-
-
-
-
-
-
 

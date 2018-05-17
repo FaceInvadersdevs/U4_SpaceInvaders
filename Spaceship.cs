@@ -157,9 +157,9 @@ namespace U4_SpaceInvaders
             if (Keyboard.IsKeyDown(Key.Space))
             {
                 if (Globals.movecooldown == 10)
+                {
+                    if (Globals.shotcooldown == 20)
                     {
-                     if (Globals.shotcooldown == 20)
-                     {
                         if (Globals.EasterEggActive == true)
                         {
                             playerRectangle.Fill = sprite_F_FaceShoot;
@@ -172,7 +172,7 @@ namespace U4_SpaceInvaders
                             Globals.movecooldown = 0;
                             Globals.shotcooldown = 0;
                         }
-                     }
+                    }
                 }
             }
             if (Keyboard.IsKeyUp(Key.Space))
