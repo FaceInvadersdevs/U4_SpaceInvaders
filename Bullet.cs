@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using U4_SpaceInvaders;
 
@@ -21,12 +22,15 @@ namespace U4_SpaceInvaders
         MainWindow window;
         Rectangle bulletRectangle;
 
+        ImageBrush sprite_S_Bullet = new ImageBrush(new BitmapImage(new Uri("Spaceship_Bullet.png", UriKind.Relative)));
+        ImageBrush sprite_F_Bullet = new ImageBrush(new BitmapImage(new Uri("Faceship_Bullet.png", UriKind.Relative)));
+
         public Bullet(Canvas c, MainWindow w)
         {
             //Generate Bullet
             canvas = c;
             window = w;
-            point = new Point(Globals.Spaceship_x, 558);
+            point = new Point((Globals.Spaceship_x + 28), 558);
             bulletPos = point;
             bulletRectangle = new Rectangle();
             bulletRectangle.Fill = Brushes.Red;
@@ -35,12 +39,27 @@ namespace U4_SpaceInvaders
             canvas.Children.Add(bulletRectangle);
             Canvas.SetTop(bulletRectangle, point.Y);
             Canvas.SetLeft(bulletRectangle, point.X);
+
+            if(Globals.EasterEggActive == false)
+            {
+                bulletRectangle.Fill = sprite_S_Bullet;
+            }
+            else if (Globals.EasterEggActive == true)
+            {
+                bulletRectangle.Fill = sprite_F_Bullet;
+            }
         }
 
         public void Tick()
         {
-            bulletPos.Y = bulletPos.Y + 3;
+            point.Y = point.Y - 3;
+            Canvas.SetTop(bulletRectangle, point.Y);
 
+        }
+
+        public void destroy()
+        {
+            canvas.Children.Remove(bulletRectangle);
         }
     }
 }

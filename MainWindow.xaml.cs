@@ -48,13 +48,15 @@ namespace U4_SpaceInvaders
         public static bool EasterEggActive = false;
         public static bool musicPlaying = false;
         public static bool beginfade = false;
-        public static bool isSpacePressed = false;
+        public static bool canShoot = false;
         public static bool playerCreated = false;
         public static bool blockleft = false;
         public static bool blockright = false;
 
         public static int currentRound = 1;
         public static int bulletcount;
+        public static int movecooldown = 0;
+        public static int shotcooldown = 0;
         public static double Spaceship_x;
 
 
@@ -251,14 +253,14 @@ namespace U4_SpaceInvaders
                 }
                 if (Keyboard.IsKeyDown(Key.Space))
                 {
-                    if (Globals.isSpacePressed == false)
+                    if (Globals.canShoot == false)
                     {
 
                         canvas_mainmenu.Visibility = Visibility.Hidden;
                         // canvas.battleground.Visibility = Visibility.Visible;
                         gameState = GameState.GameOn;
                         Globals.musicPlaying = false;
-                        Globals.isSpacePressed = true;
+                        Globals.canShoot = true;
 
                         List<SP1Aliens> SP1Aliens = new List<SP1Aliens>();
 
@@ -267,7 +269,7 @@ namespace U4_SpaceInvaders
                 }
                 else if (Keyboard.IsKeyUp(Key.Space))
                 {
-                    Globals.isSpacePressed = false;
+                    Globals.canShoot = false;
                 }
             }
 
@@ -275,7 +277,12 @@ namespace U4_SpaceInvaders
 
             else if (gameState == GameState.GameOn)
             {
+                canvas_battleground.Visibility = Visibility.Visible;
                 this.Title = "Round: " + Globals.currentRound.ToString();
+
+                ImageBrush sprite_battleBackground = new ImageBrush(new BitmapImage(new Uri("BattleBackground.png", UriKind.Relative)));
+                canvas_battleground.Background = sprite_battleBackground;
+
 
                 if (Globals.playerCreated == false)
                 {
@@ -290,28 +297,31 @@ namespace U4_SpaceInvaders
 
                 if (Keyboard.IsKeyDown(Key.Space))
                 {
-                    if (Globals.isSpacePressed == false)
+                    if (Globals.canShoot == false)
                     {
                         if (Globals.EasterEggActive == false)
                         {
                             Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
                             Globals.effectPlayer.Play();
-                            Globals.isSpacePressed = true;
+                            Globals.canShoot = true;
                             CreateBullet();
                         }
                         else if (Globals.EasterEggActive == true)
                         {
                             Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
                             Globals.effectPlayer.Play();
-                            Globals.isSpacePressed = true;
                             CreateBullet();
+                            Globals.canShoot = true;
 
                         }
                     }
                 }
                 else if (Keyboard.IsKeyUp(Key.Space))
                 {
-                    Globals.isSpacePressed = false;
+                    if (Globals.shotcooldown == 20)
+                    {
+                        Globals.canShoot = false;
+                    }
                 }
 
                 if (Keyboard.IsKeyDown(Key.Enter))
@@ -326,6 +336,11 @@ namespace U4_SpaceInvaders
                     {
                         gameState = GameState.MainMenu;
                         Globals.musicPlaying = false;
+
+                        player.destroy();
+                        Globals.playerCreated = false;
+
+                        canvas_battleground.Visibility = Visibility.Hidden;
                     }
                 }
 

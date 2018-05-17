@@ -27,33 +27,7 @@
         </Canvas>
 
         <Canvas x:Name="canvas_battleground" Visibility="Visible">
-            <Rectangle x:Name="Alien1" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64"/>
-            <Rectangle x:Name="Alien2" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="64"/>
-            <Rectangle x:Name="Alien3" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="128"/>
-            <Rectangle x:Name="Alien4" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="192"/>
-            <Rectangle x:Name="Alien5" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="256"/>
-            <Rectangle x:Name="Alien6" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="320"/>
-            <Rectangle x:Name="Alien7" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="384"/>
-            <Rectangle x:Name="Alien8" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="448"/>
-            <Rectangle x:Name="Alien9" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien10" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="64" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien11" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="128" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien12" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="192" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien13" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="256" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien14" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="320" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien15" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="384" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien16" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="448" Canvas.Top="64"/>
-            <Rectangle x:Name="Alien17" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Top="128"/>
-            <Rectangle x:Name="Alien18" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="64" Canvas.Top="128"/>
-            <Rectangle x:Name="Alien19" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="128" Canvas.Top="128"/>
-            <Rectangle x:Name="Alien20" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="192" Canvas.Top="128"/>
-            <Rectangle x:Name="Alien21" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="256" Canvas.Top="128"/>
-            <Rectangle x:Name="Alien22" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="320" Canvas.Top="128"/>
-            <Rectangle x:Name="Alien23" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="384" Canvas.Top="128"/>
-            <Rectangle x:Name="Alien24" Fill="Red" MaxHeight="64" MaxWidth="64" MinWidth="64" MinHeight="64" Canvas.Left="448" Canvas.Top="128"/>
-
-
-
+            
         </Canvas>
     </Grid>
 
