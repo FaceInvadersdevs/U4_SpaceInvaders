@@ -21,6 +21,8 @@ namespace U4_SpaceInvaders
         Canvas canvas;
         MainWindow window;
         Rectangle bulletRectangle;
+        public Rect boundingBox { get => box; }
+        Rect box;
 
         ImageBrush sprite_S_Bullet = new ImageBrush(new BitmapImage(new Uri("Spaceship_Bullet.png", UriKind.Relative)));
         ImageBrush sprite_F_Bullet = new ImageBrush(new BitmapImage(new Uri("Faceship_Bullet.png", UriKind.Relative)));
@@ -39,8 +41,9 @@ namespace U4_SpaceInvaders
             canvas.Children.Add(bulletRectangle);
             Canvas.SetTop(bulletRectangle, point.Y);
             Canvas.SetLeft(bulletRectangle, point.X);
+            box = new Rect(point, new Size (8,32));
 
-            if(Globals.EasterEggActive == false)
+            if (Globals.EasterEggActive == false)
             {
                 bulletRectangle.Fill = sprite_S_Bullet;
             }
@@ -55,6 +58,48 @@ namespace U4_SpaceInvaders
             point.Y = point.Y - 3;
             Canvas.SetTop(bulletRectangle, point.Y);
 
+            box.Y = point.Y;
+
+        }
+
+
+        public bool collidesWith(SP1Aliens sP1A)
+        {
+            if (this.boundingBox.X > sP1A.boundingBox.X && this.boundingBox.X < (sP1A.boundingBox.X + 50)
+                && this.boundingBox.Y < (sP1A.boundingBox.Y + 64))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool collidesWith(SP2Aliens sp2)
+        {
+            if (this.boundingBox.X > sp2.boundingBox.X && this.boundingBox.X < (sp2.boundingBox.X + 60)
+                && this.boundingBox.Y < (sp2.boundingBox.Y + 64))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool collidesWith(SP3Aliens sp3)
+        {
+            if (this.boundingBox.X > sp3.boundingBox.X && this.boundingBox.X < (sp3.boundingBox.X + 50)
+                && this.boundingBox.Y < (sp3.boundingBox.Y + 64))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void destroy()

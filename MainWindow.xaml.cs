@@ -54,13 +54,17 @@ namespace U4_SpaceInvaders
         public static bool blockright = false;
         public static bool areAliensCreated = false;
         public static bool areAliensCreated2 = false;
+        public static bool areAliensCreated3 = false;
 
+        public static int currentScore = 0;
+        public static int currentLives = 3;
         public static int currentRound = 1;
         public static int bulletcount;
         public static int movecooldown = 0;
         public static int shotcooldown = 0;
         public static int SP1AliensCreated = 0;
         public static int SP2AliensCreated = 0;
+        public static int SP3AliensCreated = 0;
         public static double Spaceship_x;
 
 
@@ -86,6 +90,7 @@ namespace U4_SpaceInvaders
         List<Bullet> bullets = new List<Bullet>();
         List<SP1Aliens> sp1Aliens = new List<SP1Aliens>();
         List<SP2Aliens> sp2Aliens = new List<SP2Aliens>();
+        List<SP3Aliens> sp3Aliens = new List<SP3Aliens>();
 
 
         public MainWindow()
@@ -237,6 +242,7 @@ namespace U4_SpaceInvaders
         public void Gamestates()
         {
 
+            //mainmenu tick events
             if (gameState == GameState.MainMenu)
             {
                 canvas_mainmenu.Visibility = Visibility.Visible;
@@ -278,116 +284,189 @@ namespace U4_SpaceInvaders
                 }
             }
 
-
-
+            //during-game tick events
             else if (gameState == GameState.GameOn)
             {
                 canvas_battleground.Visibility = Visibility.Visible;
-                this.Title = "Round: " + Globals.currentRound.ToString();
+                this.Title = "Round: " + Globals.currentRound.ToString() + " - Score: " + Globals.currentScore.ToString() + " - Lives: " + Globals.currentLives.ToString();
+
+                List<Bullet> bulletsToDelete = new List<Bullet>();
+                List<SP1Aliens> sp1aliensToDelete = new List<SP1Aliens>();
+                List<SP2Aliens> sp2aliensToDelete = new List<SP2Aliens>();
+                List<SP3Aliens> sp3aliensToDelete = new List<SP3Aliens>();
 
                 // SP 1-4 Aliens below
 
                 ImageBrush sprite_battleBackground = new ImageBrush(new BitmapImage(new Uri("BattleBackground.png", UriKind.Relative)));
                 canvas_battleground.Background = sprite_battleBackground;
 
-                if (Globals.areAliensCreated == false)
+                if (Globals.playerCreated == false)
                 {
-                    for (int i = 0; i < 8; i++)
-                    {
-                        sp1Aliens.Add(new SP1Aliens(canvas_battleground, this));
-
-                        if (Globals.SP1AliensCreated == 8)
-                        {
-                            Globals.areAliensCreated = true;
-                        }
-                    }
-
-
-
-
+                    CreatePlayer();
                 }
-                if (Globals.areAliensCreated2 == false)
+                player.Tick();
+                BulletEventsAndCollison(bulletsToDelete, sp1aliensToDelete, sp2aliensToDelete, sp3aliensToDelete);
+                CreateAliens();
+                CheckInput();
+            }
+
+            //end game tick events
+            else if (gameState == GameState.GameOver)
+            {
+                this.Title = "Game Over!";
+            }
+        }
+
+        private void CheckInput()
+        {
+            if (Keyboard.IsKeyDown(Key.Space))
+            {
+                if (Globals.canShoot == false)
                 {
-                    for (int i = 0; i < 8; i++)
+                    if (Globals.EasterEggActive == false)
                     {
-                        sp2Aliens.Add(new SP2Aliens(canvas_battleground, this));
-
-                        if (Globals.SP2AliensCreated == 8)
-                        {
-                            Globals.areAliensCreated2 = true;
-                        }
+                        Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
+                        Globals.effectPlayer.Play();
+                        Globals.canShoot = true;
+                        CreateBullet();
                     }
-
-                    if (Globals.playerCreated == false)
+                    else if (Globals.EasterEggActive == true)
                     {
-                        CreatePlayer();
+                        Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
+                        Globals.effectPlayer.Play();
+                        CreateBullet();
+                        Globals.canShoot = true;
+
                     }
-                    player.Tick();
+                }
+            }
+            else if (Keyboard.IsKeyUp(Key.Space))
+            {
+                if (Globals.shotcooldown == 20)
+                {
+                    Globals.canShoot = false;
+                }
+            }
 
-                    foreach (Bullet b in bullets)
+            if (Keyboard.IsKeyDown(Key.Enter))
+            {
+                //setupGame();
+                if (gameState == GameState.MainMenu)
+                {
+                    gameState = GameState.GameOn;
+                    Globals.musicPlaying = false;
+                }
+                else if (gameState == GameState.GameOn)
+                {
+                    gameState = GameState.MainMenu;
+                    Globals.musicPlaying = false;
+
+                    player.destroy();
+                    Globals.playerCreated = false;
+
+                    canvas_battleground.Visibility = Visibility.Hidden;
+                }
+            }
+
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                Clipboard.SetText(Mouse.GetPosition(this).ToString());
+            }
+        }
+
+        private void BulletEventsAndCollison(List<Bullet> bulletsToDelete, List<SP1Aliens> sp1aliensToDelete, List<SP2Aliens> sp2aliensToDelete, List<SP3Aliens> sp3aliensToDelete)
+        {
+            foreach (Bullet b in bullets)
+            {
+                b.Tick();
+
+                foreach (SP1Aliens sp1 in sp1Aliens)
+                {
+                    if (b.collidesWith(sp1) == true)
                     {
-                        b.Tick();
+                        b.destroy();
+                        sp1.destroy();
+                        bulletsToDelete.Add(b);
+                        sp1aliensToDelete.Add(sp1);
                     }
-
-                    if (Keyboard.IsKeyDown(Key.Space))
+                }
+                foreach (SP2Aliens sp2 in sp2Aliens)
+                {
+                    if (b.collidesWith(sp2) == true)
                     {
-                        if (Globals.canShoot == false)
-                        {
-                            if (Globals.EasterEggActive == false)
-                            {
-                                Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
-                                Globals.effectPlayer.Play();
-                                Globals.canShoot = true;
-                                CreateBullet();
-                            }
-                            else if (Globals.EasterEggActive == true)
-                            {
-                                Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
-                                Globals.effectPlayer.Play();
-                                CreateBullet();
-                                Globals.canShoot = true;
-
-                            }
-                        }
+                        b.destroy();
+                        sp2.destroy();
+                        bulletsToDelete.Add(b);
+                        sp2aliensToDelete.Add(sp2);
                     }
-                    else if (Keyboard.IsKeyUp(Key.Space))
+                }
+                foreach (SP3Aliens sp3 in sp3Aliens)
+                {
+                    if (b.collidesWith(sp3) == true)
                     {
-                        if (Globals.shotcooldown == 20)
-                        {
-                            Globals.canShoot = false;
-                        }
-                    }
-
-                    if (Keyboard.IsKeyDown(Key.Enter))
-                    {
-                        //setupGame();
-                        if (gameState == GameState.MainMenu)
-                        {
-                            gameState = GameState.GameOn;
-                            Globals.musicPlaying = false;
-                        }
-                        else if (gameState == GameState.GameOn)
-                        {
-                            gameState = GameState.MainMenu;
-                            Globals.musicPlaying = false;
-
-                            player.destroy();
-                            Globals.playerCreated = false;
-
-                            canvas_battleground.Visibility = Visibility.Hidden;
-                        }
-                    }
-
-                    if (Mouse.LeftButton == MouseButtonState.Pressed)
-                    {
-                        Clipboard.SetText(Mouse.GetPosition(this).ToString());
+                        b.destroy();
+                        sp3.destroy();
+                        bulletsToDelete.Add(b);
+                        sp3aliensToDelete.Add(sp3);
                     }
                 }
             }
 
-            else if (gameState == GameState.GameOver)
+            foreach (Bullet b in bulletsToDelete)
             {
-                this.Title = "Game Over!";
+                bullets.Remove(b);
+            }
+            foreach (SP1Aliens sp1 in sp1aliensToDelete)
+            {
+                sp1Aliens.Remove(sp1);
+            }
+            foreach (SP2Aliens sp2 in sp2aliensToDelete)
+            {
+                sp2Aliens.Remove(sp2);
+            }
+            foreach (SP3Aliens sp3 in sp3aliensToDelete)
+            {
+                sp3Aliens.Remove(sp3);
+            }
+        }
+
+        private void CreateAliens()
+        {
+            if (Globals.areAliensCreated == false)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    sp1Aliens.Add(new SP1Aliens(canvas_battleground, this));
+
+                    if (Globals.SP1AliensCreated == 8)
+                    {
+                        Globals.areAliensCreated = true;
+                    }
+                }
+            }
+            if (Globals.areAliensCreated2 == false)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    sp2Aliens.Add(new SP2Aliens(canvas_battleground, this));
+
+                    if (Globals.SP2AliensCreated == 8)
+                    {
+                        Globals.areAliensCreated2 = true;
+                    }
+                }
+            }
+            if (Globals.areAliensCreated3 == false)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    sp3Aliens.Add(new SP3Aliens(canvas_battleground, this));
+
+                    if (Globals.SP3AliensCreated == 8)
+                    {
+                        Globals.areAliensCreated3 = true;
+                    }
+                }
             }
         }
 
