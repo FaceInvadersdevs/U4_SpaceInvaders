@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace U4_SpaceInvaders
 {
-    class SP1Aliens
+    class SP2Aliens
     {
         //Generate Player Variables
         Point AlienPos = new Point();
@@ -25,15 +25,15 @@ namespace U4_SpaceInvaders
 
 
         //Create Sprites
-        ImageBrush sprite_SP1alien = new ImageBrush(new BitmapImage(new Uri("Alien SP1.png", UriKind.Relative)));
-        ImageBrush sprite_LittleGreen = new ImageBrush(new BitmapImage(new Uri("Dranino.png", UriKind.Relative)));
+        ImageBrush sprite_SP2alien = new ImageBrush(new BitmapImage(new Uri("Alien SP2.png", UriKind.Relative)));
+        ImageBrush sprite_BigGreen = new ImageBrush(new BitmapImage(new Uri("Dracadre.png", UriKind.Relative)));
 
-        public SP1Aliens(Canvas c, MainWindow w)
+        public SP2Aliens(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
-            point = new Point((64 * Globals.SP1AliensCreated), 0);
+            point = new Point((64 * Globals.SP2AliensCreated), 64);
             AlienPos = point;
             AlienRectangle = new Rectangle();
             AlienRectangle.Fill = Brushes.Green;
@@ -42,20 +42,21 @@ namespace U4_SpaceInvaders
             canvas.Children.Add(AlienRectangle);
             Canvas.SetTop(AlienRectangle, point.Y);
             Canvas.SetLeft(AlienRectangle, point.X);
-            Globals.SP1AliensCreated++;
+            Globals.SP2AliensCreated++;
             box = new Rect(point, new Size(64, 64));
 
             //Sprites
             if (Globals.EasterEggActive == false)
             {
-                AlienRectangle.Fill = sprite_LittleGreen;
+                AlienRectangle.Fill = sprite_BigGreen;
             }
             else if (Globals.EasterEggActive == true)
             {
-                AlienRectangle.Fill = sprite_SP1alien;
+                AlienRectangle.Fill = sprite_SP2alien;
             }
 
         }
+
 
         public void Tick()
         {
@@ -68,7 +69,7 @@ namespace U4_SpaceInvaders
         public void destroy()
         {
             canvas.Children.Remove(AlienRectangle);
-            Globals.currentScore = Globals.currentScore + 8;
+            Globals.currentScore = Globals.currentScore + 4;
         }
 
 

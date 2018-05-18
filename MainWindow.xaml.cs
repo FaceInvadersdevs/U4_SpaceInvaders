@@ -66,6 +66,7 @@ namespace U4_SpaceInvaders
         public static int SP2AliensCreated = 0;
         public static int SP3AliensCreated = 0;
         public static double Spaceship_x;
+        public static double AlienSpeed = 0;
 
 
         public static SoundPlayer musicPlayer = new SoundPlayer();
@@ -174,12 +175,12 @@ namespace U4_SpaceInvaders
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             //plays music specific to gamestates
-            MusicEvents();
+            //MusicEvents();
 
             //Gamestate check and update
             Gamestates();
 
-            FadeBeginText();
+            //FadeBeginText();
         }
 
         private void FadeBeginText()
@@ -273,7 +274,7 @@ namespace U4_SpaceInvaders
                         Globals.musicPlaying = false;
                         Globals.canShoot = true;
 
-                        List<SP1Aliens> SP1Aliens = new List<SP1Aliens>();
+                      //  List<SP1Aliens> SP1Aliens = new List<SP1Aliens>();
 
 
                     }
@@ -308,12 +309,35 @@ namespace U4_SpaceInvaders
                 BulletEventsAndCollison(bulletsToDelete, sp1aliensToDelete, sp2aliensToDelete, sp3aliensToDelete);
                 CreateAliens();
                 CheckInput();
+
+                AliensTick();
+
+                if (Mouse.LeftButton == MouseButtonState.Pressed)
+                {
+                    MessageBox.Show(Globals.AlienSpeed.ToString());
+                }
             }
 
             //end game tick events
             else if (gameState == GameState.GameOver)
             {
                 this.Title = "Game Over!";
+            }
+        }
+
+        private void AliensTick()
+        {
+            foreach (SP1Aliens sp1 in sp1Aliens)
+            {
+                sp1.Tick();
+            }
+            foreach (SP2Aliens sp2 in sp2Aliens)
+            {
+                sp2.Tick();
+            }
+            foreach (SP3Aliens sp3 in sp3Aliens)
+            {
+                sp3.Tick();
             }
         }
 
@@ -382,6 +406,7 @@ namespace U4_SpaceInvaders
 
                 foreach (SP1Aliens sp1 in sp1Aliens)
                 {
+                    sp1.Tick();
                     if (b.collidesWith(sp1) == true)
                     {
                         b.destroy();
@@ -392,6 +417,7 @@ namespace U4_SpaceInvaders
                 }
                 foreach (SP2Aliens sp2 in sp2Aliens)
                 {
+                    sp2.Tick();
                     if (b.collidesWith(sp2) == true)
                     {
                         b.destroy();
@@ -402,6 +428,7 @@ namespace U4_SpaceInvaders
                 }
                 foreach (SP3Aliens sp3 in sp3Aliens)
                 {
+                    sp3.Tick();
                     if (b.collidesWith(sp3) == true)
                     {
                         b.destroy();
