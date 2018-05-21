@@ -21,6 +21,8 @@ namespace U4_SpaceInvaders
         Canvas canvas;
         MainWindow window;
         Rectangle playerRectangle;
+        public Rect boundingBox { get => box; }
+        Rect box;
 
         //Create Sprites
         ImageBrush sprite_F_MoveLeft = new ImageBrush(new BitmapImage(new Uri("Faceship_Move_Left.png", UriKind.Relative)));
@@ -47,16 +49,15 @@ namespace U4_SpaceInvaders
             canvas.Children.Add(playerRectangle);
             Canvas.SetTop(playerRectangle, point.Y);
             Canvas.SetLeft(playerRectangle, point.X);
+            box = new Rect(point, new Size(64, 64));
 
             if (Globals.EasterEggActive == true)
             {
-                ImageBrush sprite_Faceship = new ImageBrush(new BitmapImage(new Uri("Faceship.png", UriKind.Relative)));
-                playerRectangle.Fill = sprite_Faceship;
+                playerRectangle.Fill = sprite_F_Spaceship;
             }
             if (Globals.EasterEggActive == false)
             {
-                ImageBrush Sprite_Spaceship = new ImageBrush(new BitmapImage(new Uri("Spaceship.png", UriKind.Relative)));
-                playerRectangle.Fill = Sprite_Spaceship;
+                playerRectangle.Fill = sprite_S_Spaceship;
             }
 
         }
@@ -64,8 +65,10 @@ namespace U4_SpaceInvaders
         public void Tick()
         {
             Globals.Spaceship_x = playerPos.X;
+            box.X = playerPos.X;
+            box.Y = playerPos.Y;
 
-            PlayerMovement();
+            PlayerControls();
 
             if (Globals.movecooldown < 10)
             {
@@ -77,7 +80,7 @@ namespace U4_SpaceInvaders
             }
         }
 
-        private void PlayerMovement()
+        public void PlayerControls()
         {
             if (Keyboard.IsKeyDown(Key.Left))
             {
@@ -87,7 +90,7 @@ namespace U4_SpaceInvaders
                     {
                         //PlayerPosX = playerPos.X.ToString();
                         //double.TryParse(PlayerPosX, out dbl_playerpos);
-                        playerPos.X = playerPos.X - 2.5;
+                        playerPos.X = playerPos.X - 5;
                         point.X = playerPos.X;
                         Canvas.SetLeft(playerRectangle, point.X);
 
@@ -101,7 +104,7 @@ namespace U4_SpaceInvaders
                         }
 
 
-                        if (playerPos.X <= 16)
+                        if (playerPos.X <= 8)
                         {
                             Globals.blockleft = true;
 
@@ -109,7 +112,7 @@ namespace U4_SpaceInvaders
                     }
                     else if (Globals.blockleft == true)
                     {
-                        if (playerPos.X > 16)
+                        if (playerPos.X > 8)
                         {
                             Globals.blockleft = false;
 
@@ -125,7 +128,7 @@ namespace U4_SpaceInvaders
                     {
                         //PlayerPosX = playerPos.X.ToString();
                         //double.TryParse(PlayerPosX, out dbl_playerpos);
-                        playerPos.X = playerPos.X + 2.5;
+                        playerPos.X = playerPos.X + 5;
                         point.X = playerPos.X;
                         Canvas.SetLeft(playerRectangle, point.X);
 
@@ -138,7 +141,7 @@ namespace U4_SpaceInvaders
                             playerRectangle.Fill = sprite_S_MoveRight;
                         }
 
-                        if (playerPos.X >= 584)
+                        if (playerPos.X >= 592)
                         {
                             Globals.blockright = true;
 
@@ -146,7 +149,7 @@ namespace U4_SpaceInvaders
                     }
                     else if (Globals.blockright == true)
                     {
-                        if (playerPos.X < 584)
+                        if (playerPos.X < 592)
                         {
                             Globals.blockright = false;
 
@@ -154,7 +157,7 @@ namespace U4_SpaceInvaders
                     }
                 }
             }
-            if (Keyboard.IsKeyDown(Key.Space))
+            if (Keyboard.IsKeyDown(Key.Space) || Keyboard.IsKeyDown(Key.Space) && Keyboard.IsKeyDown(Key.Right) || Keyboard.IsKeyDown(Key.Space) && Keyboard.IsKeyDown(Key.Left))
             {
                 if (Globals.movecooldown == 10)
                 {
@@ -162,20 +165,26 @@ namespace U4_SpaceInvaders
                     {
                         if (Globals.EasterEggActive == true)
                         {
-                            playerRectangle.Fill = sprite_F_FaceShoot;
+                            window.CreateBullet();
                             Globals.movecooldown = 0;
                             Globals.shotcooldown = 0;
+                            Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
+                            Globals.effectPlayer.Play();
+                            playerRectangle.Fill = sprite_F_FaceShoot;
                         }
                         if (Globals.EasterEggActive == false)
                         {
-                            playerRectangle.Fill = sprite_S_SpaceShoot;
+                            window.CreateBullet();
                             Globals.movecooldown = 0;
                             Globals.shotcooldown = 0;
+                            Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
+                            Globals.effectPlayer.Play();
+                            playerRectangle.Fill = sprite_S_SpaceShoot;
                         }
                     }
                 }
             }
-            if (Keyboard.IsKeyUp(Key.Space))
+            if (Globals.shotcooldown > 10)
             {
                 if (Keyboard.IsKeyUp(Key.Left))
                 {
@@ -194,6 +203,29 @@ namespace U4_SpaceInvaders
                         }
                     }
                 }
+            }
+        }
+
+        public void Shot()
+        {
+            if (Globals.currentLives > 1)
+            {
+                Globals.currentLives--;
+
+                if (Globals.currentRound > 1)
+                {
+                    Globals.currentRound--;
+                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                }
+                else if (Globals.currentRound == 1)
+                {
+                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                }
+
+            }
+            else if (Globals.currentLives == 1)
+            {
+                window.gameState = GameState.GameOver;
             }
         }
 

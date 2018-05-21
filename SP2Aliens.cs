@@ -22,6 +22,12 @@ namespace U4_SpaceInvaders
         Rectangle AlienRectangle;
         public Rect boundingBox { get => box; }
         Rect box;
+        public bool AlienMoveDown = false;
+        public bool AlienMoveRight = true;
+        public bool AlienMoveLeft = false;
+        int rnumber;
+        int alienscreated = Globals.SP2AliensCreated;
+        Random r = new Random(3);
 
 
         //Create Sprites
@@ -60,11 +66,82 @@ namespace U4_SpaceInvaders
 
         public void Tick()
         {
-            Globals.AlienSpeed = Globals.currentRound;
-            point.X = point.X + (Globals.AlienSpeed / 5);
-            Canvas.SetLeft(AlienRectangle, point.X);
-            box.X = point.X;
+            Movement();
+
+
+            rnumber = r.Next();
+            var i = Util.GetRandom();
+            if (i == 200 + alienscreated)
+            {
+                r = new Random();
+
+                window.CreateEnemyBullet(point);
+            }
         }
+
+        private void Movement()
+        {
+            //Move down if near border
+            if (point.X >= 592)
+            {
+                if (AlienMoveRight == true)
+                {
+                    AlienMoveDown = true;
+                    point.X = point.X - 1;
+                }
+
+            }
+            if (point.X <= 0)
+            {
+                if (AlienMoveLeft == true)
+                {
+                    AlienMoveDown = true;
+                    point.X = point.X + 1;
+                }
+            }
+
+            //Move left or right
+            if (AlienMoveRight == true)
+            {
+                Globals.AlienSpeed = Globals.currentRound;
+                point.X = point.X + (Globals.AlienSpeed / 5);
+                Canvas.SetLeft(AlienRectangle, point.X);
+                Canvas.SetTop(AlienRectangle, point.Y);
+                box.X = point.X;
+                box.Y = point.Y;
+            }
+            if (AlienMoveLeft == true)
+            {
+                Globals.AlienSpeed = Globals.currentRound;
+                point.X = point.X - (Globals.AlienSpeed / 5);
+                Canvas.SetLeft(AlienRectangle, point.X);
+                Canvas.SetTop(AlienRectangle, point.Y);
+                box.X = point.X;
+                box.Y = point.Y;
+            }
+        }
+
+
+        public void MoveDown()
+        {
+            point.Y = point.Y + 64;
+            AlienMoveDown = false;
+            Canvas.SetTop(AlienRectangle, point.Y);
+
+            if (AlienMoveRight == true)
+            {
+                AlienMoveRight = false;
+                AlienMoveLeft = true;
+            }
+
+            else if (AlienMoveLeft == true)
+            {
+                AlienMoveRight = true;
+                AlienMoveLeft = false;
+            }
+
+        }
+
 
         public void destroy()
         {
@@ -76,7 +153,6 @@ namespace U4_SpaceInvaders
     }
 
 }
-
 
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -40,7 +41,8 @@ namespace U4_SpaceInvaders
 
 
 
-    enum GameState { MainMenu, GameOn, GameOver }
+    public enum GameState { MainMenu, GameOn, GameOver }
+
 
 
     public static class Globals
@@ -55,25 +57,83 @@ namespace U4_SpaceInvaders
         public static bool areAliensCreated = false;
         public static bool areAliensCreated2 = false;
         public static bool areAliensCreated3 = false;
+        public static bool areBunkersCreated = false;
+        public static bool isLeaderboardCreated = false;
+        public static bool areStatsWriten = false;
+        public static bool btn_SubmitClicked = false;
+        public static bool areStatsEntered = false;
+        public static bool isMainMenuCreated = false;
 
         public static int currentScore = 0;
         public static int currentLives = 3;
         public static int currentRound = 1;
-        public static int bulletcount;
+        public static int bulletcount = 0;
         public static int movecooldown = 0;
         public static int shotcooldown = 0;
         public static int SP1AliensCreated = 0;
         public static int SP2AliensCreated = 0;
         public static int SP3AliensCreated = 0;
-        public static double Spaceship_x;
+        public static int BunkersCreated = 0;
+        public static int first_p_score = 0;
+        public static int first_p_round = 0;
+        public static int second_p_score = 0;
+        public static int second_p_round = 0;
+        public static int third_p_score = 0;
+        public static int third_p_round = 0;
+        public static int fourth_p_score = 0;
+        public static int fourth_p_round = 0;
+        public static int fifth_p_score = 0;
+        public static int fifth_p_round = 0;
+        public static int yourPlace = 0;
+        public static double Spaceship_x = 0;
         public static double AlienSpeed = 0;
+
+
+        public static string first_p_name = "name";
+        public static string first_p_stats = "Score: " + first_p_score.ToString() + "\nRound:" + first_p_round.ToString();
+        public static string second_p_name = "name";
+        public static string second_p_stats = "Score: " + second_p_score.ToString() + "\nRound:" + second_p_round.ToString();
+        public static string third_p_name = "name";
+        public static string third_p_stats = "Score: " + third_p_score.ToString() + "\nRound:" + third_p_round.ToString();
+        public static string fourth_p_name = "name";
+        public static string fourth_p_stats = "Score: " + fourth_p_score.ToString() + "\nRound:" + fourth_p_round.ToString();
+        public static string fifth_p_name = "name";
+        public static string fifth_p_stats = "Score: " + fifth_p_score.ToString() + "\nRound:" + fifth_p_round.ToString();
+        public static string yourName;
 
 
         public static SoundPlayer musicPlayer = new SoundPlayer();
         public static MediaPlayer effectPlayer = new MediaPlayer();
 
+        
+
+        //sets brushes to be the same as the image specified
+        public static ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri("Space Invaders.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP1 = new ImageBrush(new BitmapImage(new Uri("Dranino.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP2 = new ImageBrush(new BitmapImage(new Uri("Dracadre.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP3 = new ImageBrush(new BitmapImage(new Uri("Draconus.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Draxxor.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_Spaceship = new ImageBrush(new BitmapImage(new Uri("Spaceship.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_MMBackground = new ImageBrush(new BitmapImage(new Uri("Face Invaders.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP1 = new ImageBrush(new BitmapImage(new Uri("Alien SP1.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP2 = new ImageBrush(new BitmapImage(new Uri("Alien SP2.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP3 = new ImageBrush(new BitmapImage(new Uri("Alien SP3.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Alien SP4.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_Spaceship = new ImageBrush(new BitmapImage(new Uri("Faceship.png", UriKind.Relative)));
+
+        public static ImageBrush sprite_S_Leaderboard = new ImageBrush(new BitmapImage(new Uri("S_Leaderboard.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_Leaderboard = new ImageBrush(new BitmapImage(new Uri("F_Leaderboard.png", UriKind.Relative)));
+
     }
 
+    public static class Util
+    {
+        private static Random rnd = new Random();
+        public static int GetRandom()
+        {
+            return rnd.Next(1,(6001 - (Globals.currentRound * 100)));
+        }
+    }
 
 
     /// <summary>
@@ -82,16 +142,51 @@ namespace U4_SpaceInvaders
     public partial class MainWindow : Window
     {
 
-        GameState gameState;
+        public GameState gameState;
 
         System.Windows.Threading.DispatcherTimer gameTimer = new System.Windows.Threading.DispatcherTimer();
         Spaceship player;
-        Bullet bullet;
+
+        Rectangle MMSpaceship = new Rectangle();
+        Rectangle MMAlienSP1 = new Rectangle();
+        Rectangle MMAlienSP2 = new Rectangle();
+        Rectangle MMAlienSP3 = new Rectangle();
+        Rectangle MMAlienSP4 = new Rectangle();
+        Button EasterEgg = new Button();
+        TextBlock txt_Begin = new TextBlock();
+        public TextBox inpt_name = new TextBox();
+        public TextBlock txt_name = new TextBlock();
+        public Button btn_submit = new Button();
+        public TextBlock first_name = new TextBlock();
+        public TextBlock first_stats = new TextBlock();
+        public TextBlock second_name = new TextBlock();
+        public TextBlock second_stats = new TextBlock();
+        public TextBlock third_name = new TextBlock();
+        public TextBlock third_stats = new TextBlock();
+        public TextBlock fourth_name = new TextBlock();
+        public TextBlock fourth_stats = new TextBlock();
+        public TextBlock fifth_name = new TextBlock();
+        public TextBlock fifth_stats = new TextBlock();
+        public TextBlock your_stats = new TextBlock();
+        public Button leave_Leaderboard = new Button();
 
         List<Bullet> bullets = new List<Bullet>();
+        List<Enemy_Bullet> enemy_Bullets = new List<Enemy_Bullet>();
+        List<Bunker> bunkers = new List<Bunker>();
         List<SP1Aliens> sp1Aliens = new List<SP1Aliens>();
         List<SP2Aliens> sp2Aliens = new List<SP2Aliens>();
         List<SP3Aliens> sp3Aliens = new List<SP3Aliens>();
+
+        List<Bullet> bulletsToDelete = new List<Bullet>();
+        List<Enemy_Bullet> enemy_BulletsToDelete = new List<Enemy_Bullet>();
+        List<Bunker> bunkersToDelete = new List<Bunker>();
+        List<SP1Aliens> sp1aliensToDelete = new List<SP1Aliens>();
+        List<SP2Aliens> sp2aliensToDelete = new List<SP2Aliens>();
+        List<SP3Aliens> sp3aliensToDelete = new List<SP3Aliens>();
+
+        List<SP1Aliens> sp1AlienShot = new List<SP1Aliens>();
+        List<SP2Aliens> sp2AlienShot = new List<SP2Aliens>();
+        List<SP3Aliens> sp3AlienShot = new List<SP3Aliens>();
 
 
         public MainWindow()
@@ -106,7 +201,11 @@ namespace U4_SpaceInvaders
             gameTimer.Start();
 
             gameState = GameState.MainMenu;
-            DrawMainMenu();
+
+            ReadStats();
+
+
+
 
         }
 
@@ -123,64 +222,73 @@ namespace U4_SpaceInvaders
             if (Globals.EasterEggActive == false)
             {
                 Globals.EasterEggActive = true;
-                DrawMainMenu();
+                ChangeMainMenuSprites();
             }
             else if (Globals.EasterEggActive == true)
             {
                 Globals.EasterEggActive = false;
-                DrawMainMenu();
+                ChangeMainMenuSprites();
             }
         }
 
-        private void DrawMainMenu()
+        private void CreateMainMenu()
         {
-            //sets brushes to be the same as the image specified
-            ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri("Space Invaders.png", UriKind.Relative)));
-            ImageBrush sprite_S_AlienSP1 = new ImageBrush(new BitmapImage(new Uri("Dranino.png", UriKind.Relative)));
-            ImageBrush sprite_S_AlienSP2 = new ImageBrush(new BitmapImage(new Uri("Dracadre.png", UriKind.Relative)));
-            ImageBrush sprite_S_AlienSP3 = new ImageBrush(new BitmapImage(new Uri("Draconus.png", UriKind.Relative)));
-            ImageBrush sprite_S_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Draxxor.png", UriKind.Relative)));
-            ImageBrush sprite_S_Spaceship = new ImageBrush(new BitmapImage(new Uri("Spaceship.png", UriKind.Relative)));
-            ImageBrush sprite_F_MMBackground = new ImageBrush(new BitmapImage(new Uri("Face Invaders.png", UriKind.Relative)));
-            ImageBrush sprite_F_AlienSP1 = new ImageBrush(new BitmapImage(new Uri("Alien SP1.png", UriKind.Relative)));
-            ImageBrush sprite_F_AlienSP2 = new ImageBrush(new BitmapImage(new Uri("Alien SP2.png", UriKind.Relative)));
-            ImageBrush sprite_F_AlienSP3 = new ImageBrush(new BitmapImage(new Uri("Alien SP3.png", UriKind.Relative)));
-            ImageBrush sprite_F_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Alien SP4.png", UriKind.Relative)));
-            ImageBrush sprite_F_Spaceship = new ImageBrush(new BitmapImage(new Uri("Faceship.png", UriKind.Relative)));
+            ResetGlobals();
+            MMSpaceship.Height = 128; MMSpaceship.Width = 128; Canvas.SetTop(MMSpaceship, 384); Canvas.SetLeft(MMSpaceship, 276);
+            MMAlienSP1.Height = 128; MMAlienSP1.Width = 128; Canvas.SetTop(MMAlienSP1, 148); Canvas.SetLeft(MMAlienSP1, 176);
+            MMAlienSP2.Height = 128; MMAlienSP2.Width = 128; Canvas.SetTop(MMAlienSP2, 148); Canvas.SetLeft(MMAlienSP2, 101);
+            MMAlienSP3.Height = 128; MMAlienSP3.Width = 128; Canvas.SetTop(MMAlienSP3, 148); Canvas.SetLeft(MMAlienSP3, 451);
+            MMAlienSP4.Height = 128; MMAlienSP4.Width = 128; Canvas.SetTop(MMAlienSP4, 148); Canvas.SetLeft(MMAlienSP4, 376);
+            EasterEgg.Height = 64; EasterEgg.Width = 128; Canvas.SetTop(EasterEgg, 510); Canvas.SetLeft(EasterEgg, 10); EasterEgg.Content = "Easter Egg Tester"; EasterEgg.Click += new RoutedEventHandler(Click_EasterEggTester);
+            txt_Begin.Width = 673; Canvas.SetTop(txt_Begin, 560); txt_Begin.Text = "Press 'Space' To Begin!"; txt_Begin.TextAlignment = TextAlignment.Center; txt_Begin.FontFamily = new FontFamily("Trajan Pro 3"); txt_Begin.FontSize = 20; txt_Begin.Foreground = Brushes.White;
 
+            canvas_mainmenu.Children.Add(MMSpaceship);
+            canvas_mainmenu.Children.Add(MMAlienSP1);
+            canvas_mainmenu.Children.Add(MMAlienSP2);
+            canvas_mainmenu.Children.Add(MMAlienSP3);
+            canvas_mainmenu.Children.Add(MMAlienSP4);
+            canvas_mainmenu.Children.Add(EasterEgg);
+            canvas_mainmenu.Children.Add(txt_Begin);
+
+            ChangeMainMenuSprites();
+            Globals.isMainMenuCreated = true;
+
+        }
+
+        private void ChangeMainMenuSprites()
+        {
             if (Globals.EasterEggActive == false)
             {
 
                 //fills rectangle with specified image
-                canvas_mainmenu.Background = sprite_S_MMBackground;
-                MMAlienSP1.Fill = sprite_S_AlienSP1;
-                MMAlienSP2.Fill = sprite_S_AlienSP2;
-                MMAlienSP3.Fill = sprite_S_AlienSP3;
-                MMAlienSP4.Fill = sprite_S_AlienSP4;
-                MMSpaceship.Fill = sprite_S_Spaceship;
+                canvas_mainmenu.Background = Globals.sprite_S_MMBackground;
+                MMAlienSP1.Fill = Globals.sprite_S_AlienSP1;
+                MMAlienSP2.Fill = Globals.sprite_S_AlienSP2;
+                MMAlienSP3.Fill = Globals.sprite_S_AlienSP3;
+                MMAlienSP4.Fill = Globals.sprite_S_AlienSP4;
+                MMSpaceship.Fill = Globals.sprite_S_Spaceship;
             }
             else if (Globals.EasterEggActive == true)
             {
                 //fills rectangle with specified image
-                canvas_mainmenu.Background = sprite_F_MMBackground;
-                MMAlienSP1.Fill = sprite_F_AlienSP1;
-                MMAlienSP2.Fill = sprite_F_AlienSP2;
-                MMAlienSP3.Fill = sprite_F_AlienSP3;
-                MMAlienSP4.Fill = sprite_F_AlienSP4;
-                MMSpaceship.Fill = sprite_F_Spaceship;
+                canvas_mainmenu.Background = Globals.sprite_F_MMBackground;
+                MMAlienSP1.Fill = Globals.sprite_F_AlienSP1;
+                MMAlienSP2.Fill = Globals.sprite_F_AlienSP2;
+                MMAlienSP3.Fill = Globals.sprite_F_AlienSP3;
+                MMAlienSP4.Fill = Globals.sprite_F_AlienSP4;
+                MMSpaceship.Fill = Globals.sprite_F_Spaceship;
             }
-
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             //plays music specific to gamestates
-            //MusicEvents();
+            MusicEvents();
 
             //Gamestate check and update
             Gamestates();
 
-            //FadeBeginText();
+            FadeBeginText();
         }
 
         private void FadeBeginText()
@@ -246,26 +354,29 @@ namespace U4_SpaceInvaders
             //mainmenu tick events
             if (gameState == GameState.MainMenu)
             {
+                canvas_leaderboard.Children.Clear();
+                canvas_battleground.Children.Clear();
                 canvas_mainmenu.Visibility = Visibility.Visible;
                 this.Title = "Main Menu";
 
-                if (Keyboard.IsKeyDown(Key.Enter))
+                if (Globals.isMainMenuCreated == false)
                 {
-                    //setupGame();
-                    // if (gameState == GameState.MainMenu)
-                    {
-                        //    gameState = GameState.GameOn;
-                        //    Globals.musicPlaying = false;
-                    }
-                    //else if (gameState == GameState.GameOn)
-                    {
-                        //  gameState = GameState.MainMenu;
-                        //Globals.musicPlaying = false;
-                    }
+                    CreateMainMenu();
                 }
+
+                if (Globals.areStatsWriten == true)
+                {
+                    Globals.areStatsWriten = false;
+                }
+
+                if (Globals.isLeaderboardCreated == true)
+                {
+                    Globals.isLeaderboardCreated = false;
+                }
+
                 if (Keyboard.IsKeyDown(Key.Space))
                 {
-                    if (Globals.canShoot == false)
+                     if (Globals.canShoot == false)
                     {
 
                         canvas_mainmenu.Visibility = Visibility.Hidden;
@@ -273,8 +384,6 @@ namespace U4_SpaceInvaders
                         gameState = GameState.GameOn;
                         Globals.musicPlaying = false;
                         Globals.canShoot = true;
-
-                      //  List<SP1Aliens> SP1Aliens = new List<SP1Aliens>();
 
 
                     }
@@ -288,13 +397,11 @@ namespace U4_SpaceInvaders
             //during-game tick events
             else if (gameState == GameState.GameOn)
             {
+                canvas_mainmenu.Children.Clear();
+                Globals.isMainMenuCreated = false;
+
                 canvas_battleground.Visibility = Visibility.Visible;
                 this.Title = "Round: " + Globals.currentRound.ToString() + " - Score: " + Globals.currentScore.ToString() + " - Lives: " + Globals.currentLives.ToString();
-
-                List<Bullet> bulletsToDelete = new List<Bullet>();
-                List<SP1Aliens> sp1aliensToDelete = new List<SP1Aliens>();
-                List<SP2Aliens> sp2aliensToDelete = new List<SP2Aliens>();
-                List<SP3Aliens> sp3aliensToDelete = new List<SP3Aliens>();
 
                 // SP 1-4 Aliens below
 
@@ -305,12 +412,35 @@ namespace U4_SpaceInvaders
                 {
                     CreatePlayer();
                 }
-                player.Tick();
-                BulletEventsAndCollison(bulletsToDelete, sp1aliensToDelete, sp2aliensToDelete, sp3aliensToDelete);
-                CreateAliens();
-                CheckInput();
 
+
+
+                player.Tick();
+                BulletEventsAndCollison();
+                CreateAliens();
+                CreateBunkers();
                 AliensTick();
+
+                RoundOver();
+
+                if (Keyboard.IsKeyDown(Key.Enter))
+                {
+                    if (gameState == GameState.MainMenu)
+                    {
+                        gameState = GameState.GameOn;
+                        Globals.musicPlaying = false;
+                    }
+                    else if (gameState == GameState.GameOn)
+                    {
+                        gameState = GameState.MainMenu;
+                        Globals.musicPlaying = false;
+
+                        player.destroy();
+                        Globals.playerCreated = false;
+
+                        canvas_battleground.Visibility = Visibility.Hidden;
+                    }
+                }
 
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
@@ -321,8 +451,236 @@ namespace U4_SpaceInvaders
             //end game tick events
             else if (gameState == GameState.GameOver)
             {
+                canvas_mainmenu.Children.Clear();
+                Globals.isMainMenuCreated = false;
+
                 this.Title = "Game Over!";
+                canvas_leaderboard.Visibility = Visibility.Visible;
+
+                Rectangle leaderboard = new Rectangle();
+                leaderboard.Height = 480;
+                leaderboard.Width = 380;
+                Canvas.SetTop(leaderboard, 100);
+                Canvas.SetLeft(leaderboard, 150);
+                if (Globals.EasterEggActive == true)
+                {
+                    leaderboard.Fill = Globals.sprite_F_Leaderboard;
+                }
+                else if (Globals.EasterEggActive == false)
+                {
+                    leaderboard.Fill = Globals.sprite_S_Leaderboard;
+                }
+
+                if (Globals.areStatsWriten == false)
+                {
+                    WriteStats();
+                }
+
+                if (Globals.isLeaderboardCreated == false)
+                {
+                    CreateLeaderboard(leaderboard);
+                }
+
+                if (Globals.btn_SubmitClicked == true)
+                {
+                    SubmitClicked(leaderboard);
+                }
+
             }
+        }
+
+        public void CreateLeaderboard(Rectangle leaderboard)
+        {
+
+            if (Globals.areStatsEntered == false)
+            {
+                UpdateLeaderboard();
+
+                canvas_leaderboard.Children.Add(leaderboard);
+                canvas_leaderboard.Children.Add(txt_name);
+                canvas_leaderboard.Children.Add(inpt_name);
+                canvas_leaderboard.Children.Add(btn_submit);
+                canvas_leaderboard.Children.Add(first_name);
+                canvas_leaderboard.Children.Add(first_stats);
+                canvas_leaderboard.Children.Add(second_name);
+                canvas_leaderboard.Children.Add(second_stats);
+                canvas_leaderboard.Children.Add(third_name);
+                canvas_leaderboard.Children.Add(third_stats);
+                canvas_leaderboard.Children.Add(fourth_name);
+                canvas_leaderboard.Children.Add(fourth_stats);
+                canvas_leaderboard.Children.Add(fifth_name);
+                canvas_leaderboard.Children.Add(fifth_stats);
+                canvas_leaderboard.Children.Add(your_stats);
+            }
+
+            else if (Globals.areStatsEntered == true)
+            {
+                leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 575); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
+
+                canvas_leaderboard.Children.Remove(txt_name);
+                canvas_leaderboard.Children.Remove(inpt_name);
+                canvas_leaderboard.Children.Remove(btn_submit);
+                canvas_leaderboard.Children.Add(leave_Leaderboard);
+            }
+
+
+            Globals.isLeaderboardCreated = true;
+        }
+
+        private void UpdateLeaderboard()
+        {
+            if (Globals.areStatsEntered == false)
+            {
+                //Set leaderboard text object attributes
+                txt_name.Height = 250; txt_name.Width = 200; txt_name.Text = "Enter your name"; txt_name.TextAlignment = TextAlignment.Center; txt_name.FontSize = 24; txt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(txt_name, 10); Canvas.SetLeft(txt_name, 240);
+                inpt_name.Height = 25; inpt_name.Width = 291; inpt_name.Text = "Enter your name here! (Max 10 letters)"; inpt_name.TextAlignment = TextAlignment.Center; inpt_name.FontSize = 12; inpt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(inpt_name, 50); Canvas.SetLeft(inpt_name, 195);
+                btn_submit.Height = 25; btn_submit.Width = 291; btn_submit.Content = "Submit"; Canvas.SetTop(btn_submit, 75); Canvas.SetLeft(btn_submit, 195); btn_submit.Click += new RoutedEventHandler(click_btnSubmit);
+                first_name.Height = 25; first_name.Width = 200; first_name.Text = Globals.first_p_name; Canvas.SetTop(first_name, 160); Canvas.SetLeft(first_name, 273); first_name.FontSize = 18; first_name.FontFamily = new FontFamily("Times New Roman");
+                first_stats.Height = 50; first_stats.Width = 200; first_stats.Text = Globals.first_p_stats; Canvas.SetTop(first_stats, 200); Canvas.SetLeft(first_stats, 273); first_stats.FontSize = 18; first_stats.FontFamily = new FontFamily("Times New Roman");
+                second_name.Height = 25; second_name.Width = 200; second_name.Text = Globals.second_p_name; Canvas.SetTop(second_name, 260); Canvas.SetLeft(second_name, 273); second_name.FontSize = 12; second_name.FontFamily = new FontFamily("Times New Roman");
+                second_stats.Height = 25; second_stats.Width = 200; second_stats.Text = Globals.second_p_stats; Canvas.SetTop(second_stats, 300); Canvas.SetLeft(second_stats, 273); second_stats.FontSize = 12; second_stats.FontFamily = new FontFamily("Times New Roman");
+                third_name.Height = 25; third_name.Width = 200; third_name.Text = Globals.third_p_name; Canvas.SetTop(third_name, 335); Canvas.SetLeft(third_name, 273); third_name.FontSize = 12; third_name.FontFamily = new FontFamily("Times New Roman");
+                third_stats.Height = 25; third_stats.Width = 200; third_stats.Text = Globals.third_p_stats; Canvas.SetTop(third_stats, 375); Canvas.SetLeft(third_stats, 273); third_stats.FontSize = 12; third_stats.FontFamily = new FontFamily("Times New Roman");
+                fourth_name.Height = 25; fourth_name.Width = 200; fourth_name.Text = Globals.fourth_p_name; Canvas.SetTop(fourth_name, 410); Canvas.SetLeft(fourth_name, 273); fourth_name.FontSize = 12; fourth_name.FontFamily = new FontFamily("Times New Roman");
+                fourth_stats.Height = 25; fourth_stats.Width = 200; fourth_stats.Text = Globals.fourth_p_stats; Canvas.SetTop(fourth_stats, 432); Canvas.SetLeft(fourth_stats, 273); fourth_stats.FontSize = 12; fourth_stats.FontFamily = new FontFamily("Times New Roman");
+                fifth_name.Height = 25; fifth_name.Width = 200; fifth_name.Text = Globals.fifth_p_name; Canvas.SetTop(fifth_name, 465); Canvas.SetLeft(fifth_name, 273); fifth_name.FontSize = 12; fifth_name.FontFamily = new FontFamily("Times New Roman");
+                fifth_stats.Height = 25; fifth_stats.Width = 200; fifth_stats.Text = Globals.fifth_p_stats; Canvas.SetTop(fifth_stats, 488); Canvas.SetLeft(fifth_stats, 273); fifth_stats.FontSize = 12; fifth_stats.FontFamily = new FontFamily("Times New Roman");
+                your_stats.Height = 25; your_stats.Width = 200; your_stats.Text = "Score: " + Globals.currentScore + "\nRound: " + Globals.currentRound; Canvas.SetTop(your_stats, 525); Canvas.SetLeft(your_stats, 273); your_stats.FontSize = 12; your_stats.FontFamily = new FontFamily("Times New Roman");
+            }
+
+            else if (Globals.areStatsEntered == true)
+            {
+                //Set leaderboard text object attributes
+                txt_name.Height = 250; txt_name.Width = 200; txt_name.Text = "Enter your name"; txt_name.TextAlignment = TextAlignment.Center; txt_name.FontSize = 24; txt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(txt_name, 10); Canvas.SetLeft(txt_name, 240);
+                inpt_name.Height = 25; inpt_name.Width = 291; inpt_name.Text = "Enter your name here! (Max 10 letters)"; inpt_name.TextAlignment = TextAlignment.Center; inpt_name.FontSize = 12; inpt_name.FontFamily = new FontFamily("Times New Roman"); Canvas.SetTop(inpt_name, 50); Canvas.SetLeft(inpt_name, 195);
+                btn_submit.Height = 25; btn_submit.Width = 291; btn_submit.Content = "Submit"; Canvas.SetTop(btn_submit, 75); Canvas.SetLeft(btn_submit, 195); btn_submit.Click += new RoutedEventHandler(click_btnSubmit);
+                first_name.Height = 25; first_name.Width = 200; first_name.Text = Globals.first_p_name; Canvas.SetTop(first_name, 160); Canvas.SetLeft(first_name, 273); first_name.FontSize = 18; first_name.FontFamily = new FontFamily("Times New Roman");
+                first_stats.Height = 50; first_stats.Width = 200; first_stats.Text = Globals.first_p_stats; Canvas.SetTop(first_stats, 200); Canvas.SetLeft(first_stats, 273); first_stats.FontSize = 18; first_stats.FontFamily = new FontFamily("Times New Roman");
+                second_name.Height = 25; second_name.Width = 200; second_name.Text = Globals.second_p_name; Canvas.SetTop(second_name, 260); Canvas.SetLeft(second_name, 273); second_name.FontSize = 12; second_name.FontFamily = new FontFamily("Times New Roman");
+                second_stats.Height = 25; second_stats.Width = 200; second_stats.Text = Globals.second_p_stats; Canvas.SetTop(second_stats, 300); Canvas.SetLeft(second_stats, 273); second_stats.FontSize = 12; second_stats.FontFamily = new FontFamily("Times New Roman");
+                third_name.Height = 25; third_name.Width = 200; third_name.Text = Globals.third_p_name; Canvas.SetTop(third_name, 335); Canvas.SetLeft(third_name, 273); third_name.FontSize = 12; third_name.FontFamily = new FontFamily("Times New Roman");
+                third_stats.Height = 25; third_stats.Width = 200; third_stats.Text = Globals.third_p_stats; Canvas.SetTop(third_stats, 375); Canvas.SetLeft(third_stats, 273); third_stats.FontSize = 12; third_stats.FontFamily = new FontFamily("Times New Roman");
+                fourth_name.Height = 25; fourth_name.Width = 200; fourth_name.Text = Globals.fourth_p_name; Canvas.SetTop(fourth_name, 410); Canvas.SetLeft(fourth_name, 273); fourth_name.FontSize = 12; fourth_name.FontFamily = new FontFamily("Times New Roman");
+                fourth_stats.Height = 25; fourth_stats.Width = 200; fourth_stats.Text = Globals.fourth_p_stats; Canvas.SetTop(fourth_stats, 432); Canvas.SetLeft(fourth_stats, 273); fourth_stats.FontSize = 12; fourth_stats.FontFamily = new FontFamily("Times New Roman");
+                fifth_name.Height = 25; fifth_name.Width = 200; fifth_name.Text = Globals.fifth_p_name; Canvas.SetTop(fifth_name, 465); Canvas.SetLeft(fifth_name, 273); fifth_name.FontSize = 12; fifth_name.FontFamily = new FontFamily("Times New Roman");
+                fifth_stats.Height = 25; fifth_stats.Width = 200; fifth_stats.Text = Globals.fifth_p_stats; Canvas.SetTop(fifth_stats, 488); Canvas.SetLeft(fifth_stats, 273); fifth_stats.FontSize = 12; fifth_stats.FontFamily = new FontFamily("Times New Roman");
+                your_stats.Height = 25; your_stats.Width = 200; your_stats.Text = "Score: " + Globals.currentScore + "\nRound: " + Globals.currentRound; Canvas.SetTop(your_stats, 525); Canvas.SetLeft(your_stats, 273); your_stats.FontSize = 12; your_stats.FontFamily = new FontFamily("Times New Roman");
+                leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 575); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
+
+                canvas_leaderboard.Children.Remove(txt_name);
+                canvas_leaderboard.Children.Remove(inpt_name);
+                canvas_leaderboard.Children.Remove(btn_submit);
+                canvas_leaderboard.Children.Add(leave_Leaderboard);
+            }
+        }
+
+        public void click_btnSubmit(object sender, RoutedEventArgs e)
+        {
+            Globals.btn_SubmitClicked = true;
+        }
+
+        public void click_leaveLeaderboard(object sender, RoutedEventArgs e)
+        {
+            canvas_mainmenu.Visibility = Visibility.Visible;
+            canvas_leaderboard.Visibility = Visibility.Hidden;
+            canvas_battleground.Visibility = Visibility.Hidden;
+            canvas_battleground.Children.Clear();
+            canvas_leaderboard.Children.Clear();
+            canvas_mainmenu.Children.Clear();
+            Globals.isMainMenuCreated = false;
+            CreateMainMenu();
+            gameState = GameState.MainMenu;
+        }
+
+        public void SubmitClicked(Rectangle leaderboard)
+        {
+            if (inpt_name.Text.Length < 11 && inpt_name.Text.Length > 2)
+            {
+                Globals.areStatsEntered = true;
+                Globals.yourName = inpt_name.Text;
+                RefreshStats();
+                UpdateLeaderboard();
+                MessageBox.Show("Thanks " + Globals.yourName + ", for entering your name. The leaderboards should now be updated.");
+            }
+            else
+            {
+                MessageBox.Show("Oops, something went wrong. Please try again.");
+            }
+            Globals.btn_SubmitClicked = false;
+        }
+
+
+        private void RoundOver()
+        {
+            if (sp1Aliens.Count() == 0 && sp2Aliens.Count() == 0 && sp3Aliens.Count() == 0)
+            {
+                MessageBox.Show("You successfully completed round " + Globals.currentRound + ", with a total of " + Globals.currentLives + " lives. The next round will begin after you close this box.");
+
+                Globals.currentRound = Globals.currentRound + 1;
+                Globals.currentScore = Globals.currentScore + (5 * Globals.currentRound);
+                ResetRound();
+            }
+        }
+
+        private void ResetRound()
+        {
+            Globals.areAliensCreated = false;
+            Globals.SP1AliensCreated = 0;
+
+            Globals.areAliensCreated2 = false;
+            Globals.SP2AliensCreated = 0;
+
+            Globals.areAliensCreated3 = false;
+            Globals.SP3AliensCreated = 0;
+
+            foreach (Bullet b in bullets)
+            {
+                bulletsToDelete.Add(b);
+                b.destroy();
+            }
+            foreach (Enemy_Bullet e_b in enemy_Bullets)
+            {
+                enemy_BulletsToDelete.Add(e_b);
+                e_b.destroy();
+            }
+
+            BulletEventsAndCollison();
+            CreateAliens();
+        }
+
+        public void ResetGame()
+        {
+            ResetRound();
+
+            gameState = GameState.GameOver;
+        }
+
+        private static void ResetGlobals()
+        {
+            Globals.EasterEggActive = false;
+            Globals.musicPlaying = false;
+            Globals.beginfade = false;
+            Globals.canShoot = false;
+            Globals.playerCreated = false;
+            Globals.blockleft = false;
+            Globals.blockright = false;
+            Globals.areAliensCreated = false;
+            Globals.areAliensCreated2 = false;
+            Globals.areAliensCreated3 = false;
+            Globals.areBunkersCreated = false;
+
+            Globals.currentScore = 0;
+            Globals.currentLives = 3;
+            Globals.currentRound = 1;
+            Globals.bulletcount = 0;
+            Globals.movecooldown = 0;
+            Globals.shotcooldown = 0;
+            Globals.SP1AliensCreated = 0;
+            Globals.SP2AliensCreated = 0;
+            Globals.SP3AliensCreated = 0;
+            Globals.BunkersCreated = 0;
+            Globals.Spaceship_x = 0;
+            Globals.AlienSpeed = 0;
         }
 
         private void AliensTick()
@@ -330,75 +688,36 @@ namespace U4_SpaceInvaders
             foreach (SP1Aliens sp1 in sp1Aliens)
             {
                 sp1.Tick();
+                if (sp1.AlienMoveDown == true)
+                {
+                    foreach (SP1Aliens spA1 in sp1Aliens) { spA1.MoveDown(); }
+                    foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
+                    foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
+                }
             }
             foreach (SP2Aliens sp2 in sp2Aliens)
             {
                 sp2.Tick();
+                if (sp2.AlienMoveDown == true)
+                {
+                    foreach (SP1Aliens spA1 in sp1Aliens) { spA1.MoveDown(); }
+                    foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
+                    foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
+                }
             }
             foreach (SP3Aliens sp3 in sp3Aliens)
             {
                 sp3.Tick();
+                if (sp3.AlienMoveDown == true)
+                {
+                    foreach (SP1Aliens spA1 in sp1Aliens) { spA1.MoveDown(); }
+                    foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
+                    foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
+                }
             }
         }
 
-        private void CheckInput()
-        {
-            if (Keyboard.IsKeyDown(Key.Space))
-            {
-                if (Globals.canShoot == false)
-                {
-                    if (Globals.EasterEggActive == false)
-                    {
-                        Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
-                        Globals.effectPlayer.Play();
-                        Globals.canShoot = true;
-                        CreateBullet();
-                    }
-                    else if (Globals.EasterEggActive == true)
-                    {
-                        Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
-                        Globals.effectPlayer.Play();
-                        CreateBullet();
-                        Globals.canShoot = true;
-
-                    }
-                }
-            }
-            else if (Keyboard.IsKeyUp(Key.Space))
-            {
-                if (Globals.shotcooldown == 20)
-                {
-                    Globals.canShoot = false;
-                }
-            }
-
-            if (Keyboard.IsKeyDown(Key.Enter))
-            {
-                //setupGame();
-                if (gameState == GameState.MainMenu)
-                {
-                    gameState = GameState.GameOn;
-                    Globals.musicPlaying = false;
-                }
-                else if (gameState == GameState.GameOn)
-                {
-                    gameState = GameState.MainMenu;
-                    Globals.musicPlaying = false;
-
-                    player.destroy();
-                    Globals.playerCreated = false;
-
-                    canvas_battleground.Visibility = Visibility.Hidden;
-                }
-            }
-
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
-            {
-                Clipboard.SetText(Mouse.GetPosition(this).ToString());
-            }
-        }
-
-        private void BulletEventsAndCollison(List<Bullet> bulletsToDelete, List<SP1Aliens> sp1aliensToDelete, List<SP2Aliens> sp2aliensToDelete, List<SP3Aliens> sp3aliensToDelete)
+        private void BulletEventsAndCollison()
         {
             foreach (Bullet b in bullets)
             {
@@ -406,7 +725,6 @@ namespace U4_SpaceInvaders
 
                 foreach (SP1Aliens sp1 in sp1Aliens)
                 {
-                    sp1.Tick();
                     if (b.collidesWith(sp1) == true)
                     {
                         b.destroy();
@@ -417,7 +735,6 @@ namespace U4_SpaceInvaders
                 }
                 foreach (SP2Aliens sp2 in sp2Aliens)
                 {
-                    sp2.Tick();
                     if (b.collidesWith(sp2) == true)
                     {
                         b.destroy();
@@ -428,7 +745,6 @@ namespace U4_SpaceInvaders
                 }
                 foreach (SP3Aliens sp3 in sp3Aliens)
                 {
-                    sp3.Tick();
                     if (b.collidesWith(sp3) == true)
                     {
                         b.destroy();
@@ -436,6 +752,32 @@ namespace U4_SpaceInvaders
                         bulletsToDelete.Add(b);
                         sp3aliensToDelete.Add(sp3);
                     }
+                }
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (b.collidesWith(bunk) == true)
+                    {
+                        b.destroy();
+                        bunk.damage();
+                        bulletsToDelete.Add(b);
+
+                        if (bunk.health == 1)
+                        {
+                            bunkersToDelete.Add(bunk);
+                        }
+                    }
+                }
+            }
+
+            foreach (Enemy_Bullet e_b in enemy_Bullets)
+            {
+                e_b.Tick();
+
+                if (e_b.collidesWith(player))
+                {
+                    e_b.destroy();
+                    enemy_BulletsToDelete.Add(e_b);
+                    player.Shot();
                 }
             }
 
@@ -454,6 +796,14 @@ namespace U4_SpaceInvaders
             foreach (SP3Aliens sp3 in sp3aliensToDelete)
             {
                 sp3Aliens.Remove(sp3);
+            }
+            foreach (Bunker bunk in bunkersToDelete)
+            {
+                bunkers.Remove(bunk);
+            }
+            foreach (Enemy_Bullet e_b in enemy_BulletsToDelete)
+            {
+                enemy_Bullets.Remove(e_b);
             }
         }
 
@@ -501,5 +851,212 @@ namespace U4_SpaceInvaders
         {
             bullets.Add(new Bullet(canvas_battleground, this));
         }
+
+        private void CreateBunkers()
+        {
+            if (Globals.areBunkersCreated == false)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    bunkers.Add(new Bunker(canvas_battleground, this));
+
+                    if (Globals.BunkersCreated == 4)
+                    {
+                        Globals.areBunkersCreated = true;
+                    }
+                }
+            }
+        }
+
+        public void CreateEnemyBullet(Point point)
+        {
+            enemy_Bullets.Add(new Enemy_Bullet(canvas_battleground, this, point));
+        }
+
+        public static void ReadStats()
+        {
+            using (StreamReader StatsReader = new StreamReader("stats.txt"))
+            {
+                using (StreamReader StatLineReader = new StreamReader("stats.txt"))
+                {
+                    string allLines = StatsReader.ReadToEnd();
+                    for (int x = allLines.Count(i => i == '\n'); x > 0; x--)
+                    {
+                        string line = StatLineReader.ReadLine();
+                        if (line.Contains("1st"))
+                        {
+                            Globals.first_p_name = StatLineReader.ReadLine();
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.first_p_round);
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.first_p_score);
+                            x = x - 3;
+                        }
+                        if (line.Contains("2nd"))
+                        {
+                            Globals.second_p_name = StatLineReader.ReadLine();
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.second_p_round);
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.second_p_score);
+                            x = x - 3;
+                        }
+                        if (line.Contains("3rd"))
+                        {
+                            Globals.third_p_name = StatLineReader.ReadLine();
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.third_p_round);
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.third_p_score);
+                            x = x - 3;
+                        }
+                        if (line.Contains("4th"))
+                        {
+                            Globals.fourth_p_name = StatLineReader.ReadLine();
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.fourth_p_round);
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.fourth_p_score);
+                            x = x - 3;
+                        }
+                        if (line.Contains("5th"))
+                        {
+                            Globals.fifth_p_name = StatLineReader.ReadLine();
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.fifth_p_round);
+                            int.TryParse(StatLineReader.ReadLine(), out Globals.fifth_p_score);
+                            x = x - 3;
+                        }
+                    }
+                }
+                StatsReader.Close();
+                Console.WriteLine(Globals.first_p_name);
+                Console.WriteLine(Globals.first_p_round.ToString());
+                Console.WriteLine(Globals.first_p_score.ToString());
+                Console.WriteLine(Globals.second_p_name);
+                Console.WriteLine(Globals.second_p_round.ToString());
+                Console.WriteLine(Globals.second_p_score.ToString());
+                Console.WriteLine(Globals.third_p_name);
+                Console.WriteLine(Globals.third_p_round.ToString());
+                Console.WriteLine(Globals.third_p_score.ToString());
+                Console.WriteLine(Globals.fourth_p_name);
+                Console.WriteLine(Globals.fourth_p_round.ToString());
+                Console.WriteLine(Globals.fourth_p_score.ToString());
+                Console.WriteLine(Globals.fifth_p_name);
+                Console.WriteLine(Globals.fifth_p_round.ToString());
+                Console.WriteLine(Globals.fifth_p_score.ToString());
+
+                RefreshStats();
+            }
+        }
+
+        public static void RefreshStats()
+        {
+
+            if (Globals.currentScore > Globals.first_p_score)
+            {
+                Globals.fifth_p_name = Globals.fourth_p_name;
+                Globals.fifth_p_round = Globals.fourth_p_round;
+                Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fourth_p_name = Globals.third_p_name;
+                Globals.fourth_p_round = Globals.third_p_round;
+                Globals.fourth_p_score = Globals.third_p_score;
+                Globals.third_p_name = Globals.second_p_name;
+                Globals.third_p_round = Globals.second_p_round;
+                Globals.third_p_score = Globals.second_p_score;
+                Globals.second_p_name = Globals.first_p_name;
+                Globals.second_p_round = Globals.first_p_round;
+                Globals.second_p_score = Globals.first_p_score;
+                Globals.first_p_score = Globals.currentScore;
+                Globals.first_p_round = Globals.currentRound;
+                Globals.first_p_name = Globals.yourName;
+            }
+            else if (Globals.currentScore > Globals.second_p_score)
+            {
+                Globals.fifth_p_name = Globals.fourth_p_name;
+                Globals.fifth_p_round = Globals.fourth_p_round;
+                Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fourth_p_name = Globals.third_p_name;
+                Globals.fourth_p_round = Globals.third_p_round;
+                Globals.fourth_p_score = Globals.third_p_score;
+                Globals.third_p_name = Globals.second_p_name;
+                Globals.third_p_round = Globals.second_p_round;
+                Globals.third_p_score = Globals.second_p_score;
+                Globals.second_p_score = Globals.currentScore;
+                Globals.second_p_round = Globals.currentRound;
+                Globals.second_p_name = Globals.yourName;
+            }
+            else if (Globals.currentScore > Globals.third_p_score)
+            {
+                Globals.fifth_p_name = Globals.fourth_p_name;
+                Globals.fifth_p_round = Globals.fourth_p_round;
+                Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fourth_p_name = Globals.third_p_name;
+                Globals.fourth_p_round = Globals.third_p_round;
+                Globals.fourth_p_score = Globals.third_p_score;
+                Globals.third_p_score = Globals.currentScore;
+                Globals.third_p_round = Globals.currentRound;
+                Globals.third_p_name = Globals.yourName;
+            }
+            else if (Globals.currentScore > Globals.fourth_p_score)
+            {
+                Globals.fifth_p_name = Globals.fourth_p_name;
+                Globals.fifth_p_round = Globals.fourth_p_round;
+                Globals.fifth_p_score = Globals.fourth_p_score;
+                Globals.fourth_p_score = Globals.currentScore;
+                Globals.fourth_p_round = Globals.currentRound;
+                Globals.fourth_p_name = Globals.yourName;
+            }
+            else if (Globals.currentScore > Globals.fifth_p_score)
+            {
+                Globals.fifth_p_score = Globals.currentScore;
+                Globals.fifth_p_round = Globals.currentRound;
+                Globals.fifth_p_name = Globals.yourName;
+            }
+
+            Globals.first_p_stats = "Score: " + Globals.first_p_score.ToString() + "\nRound:" + Globals.first_p_round.ToString();
+            Globals.second_p_stats = "Score: " + Globals.second_p_score.ToString() + "\nRound:" + Globals.second_p_round.ToString();
+            Globals.third_p_stats = "Score: " + Globals.third_p_score.ToString() + "\nRound:" + Globals.third_p_round.ToString();
+            Globals.fourth_p_stats = "Score: " + Globals.fourth_p_score.ToString() + "\nRound:" + Globals.fourth_p_round.ToString();
+            Globals.fifth_p_stats = "Score: " + Globals.fifth_p_score.ToString() + "\nRound:" + Globals.fifth_p_round.ToString();
+        }
+
+        public static void WriteStats()
+        {
+            
+            //RefreshStats();
+
+            //using (StreamWriter StatWriter = new StreamWriter("stats.txt", false))
+            {
+                //StatWriter.Write(Globals.first_p_name);
+            }
+        }
     }
 }
+
+//Method involving adding a win to "wins.txt"
+//private static void AddWin()
+//{
+    //Uses a stream reader to read data from the text file "wins.txt"
+    //using (StreamReader WinReader = new StreamReader("wins.txt"))
+   // {
+        //Reads from "wins.txt and outputs an integer to Globals.SavedWins.
+       // int.TryParse(WinReader.ReadLine(), out Globals.SavedWins);
+        ////Closes the stream reader.
+       // WinReader.Close();
+       // //Writes a line to the console displaying the amount of saved wins in "wins.txt"
+        //Console.WriteLine("(Pre-win) Current saved wins in wins.txt = " + Globals.SavedWins);
+    //}
+
+    ////Uses a stream writer to write data to the text file "wins.txt"
+    //using (StreamWriter WinWriter = new StreamWriter("wins.txt"))
+    //{
+       // //Writes to "wins.txt" the amount stored in Globals.SavedWins + 1
+       // WinWriter.Write((Globals.SavedWins + 1));
+      //  WinWriter.Flush();
+      //  WinWriter.Close();
+      //  Console.WriteLine("(Post-win) Current saved wins in wins.txt = " + (Globals.SavedWins + 1));
+   // }
+//}
+
+//Method involving refreshing the amount of wins displayed at main menu.
+//private void RefreshWins()
+//{
+   // //Uses a stream reader to read data from the text file "wins.txt"
+   // using (StreamReader WinDisplay = new StreamReader("wins.txt"))
+   // {
+   //     //Displays the amount of wins at the main menu based upon the value stored in "wins.txt"
+   //     txt_WinCounter.Text = "Games Won Of Hangman Supreme: " + WinDisplay.ReadLine();
+   // }
+//}

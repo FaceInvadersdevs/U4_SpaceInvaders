@@ -8,9 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using U4_SpaceInvaders;
 
-namespace U4_spaceInvaders
+namespace U4_SpaceInvaders
 {
     class Bunker
     {
@@ -21,6 +20,10 @@ namespace U4_spaceInvaders
         Canvas canvas;
         MainWindow window;
         Rectangle bunkerRectangle;
+        public Rect boundingBox { get => box; }
+        Rect box;
+        public int health = 20;
+
 
         //Create Sprites
         ImageBrush sprite_Bunker1 = new ImageBrush(new BitmapImage(new Uri("Bunker1.png", UriKind.Relative)));
@@ -34,19 +37,41 @@ namespace U4_spaceInvaders
             //Generate Bunker
             canvas = c;
             window = w;
-            point = new Point(92, 629);
+            point = new Point((92 + (162 * Globals.BunkersCreated)), 500);
             bunkerPos = point;
             bunkerRectangle = new Rectangle();
-            bunkerRectangle.Fill = Brushes.Green;
-            bunkerRectangle.Height = 64;
-            bunkerRectangle.Width = 64;
+            bunkerRectangle.Fill = sprite_Bunker1;
+            bunkerRectangle.Height = 32;
+            bunkerRectangle.Width = 32;
             canvas.Children.Add(bunkerRectangle);
             Canvas.SetTop(bunkerRectangle, point.Y);
-            Canvas.SetLeft(bunkerRectangle, point.X); 
+            Canvas.SetLeft(bunkerRectangle, point.X);
+            box = new Rect(point, new Size(64, 64));
+            Globals.BunkersCreated++;
+        }
+
+        public void damage()
+        {
+            health--;
+            if (health == 19)
+            {
+                bunkerRectangle.Fill = sprite_Bunker2;
+            }
+            if (health == 14)
+            {
+                bunkerRectangle.Fill = sprite_Bunker3;
+            }
+            if (health == 9)
+            {
+                bunkerRectangle.Fill = sprite_Bunker4;
+            }
+            if (health == 1)
+            {
+                bunkerRectangle.Fill = sprite_Bunker5;
+            }
         }
     }
 }
-
 
 
 
