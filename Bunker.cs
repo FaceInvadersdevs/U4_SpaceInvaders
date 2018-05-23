@@ -75,5 +75,3 @@ namespace U4_SpaceInvaders
 
 
 
-
-

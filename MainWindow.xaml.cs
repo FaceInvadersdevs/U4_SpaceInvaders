@@ -105,7 +105,7 @@ namespace U4_SpaceInvaders
         public static SoundPlayer musicPlayer = new SoundPlayer();
         public static MediaPlayer effectPlayer = new MediaPlayer();
 
-        
+
 
         //sets brushes to be the same as the image specified
         public static ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri("Space Invaders.png", UriKind.Relative)));
@@ -131,7 +131,7 @@ namespace U4_SpaceInvaders
         private static Random rnd = new Random();
         public static int GetRandom()
         {
-            return rnd.Next(1,(6001 - (Globals.currentRound * 100)));
+            return rnd.Next(1, (6001 - (Globals.currentRound * 10)));
         }
     }
 
@@ -376,7 +376,7 @@ namespace U4_SpaceInvaders
 
                 if (Keyboard.IsKeyDown(Key.Space))
                 {
-                     if (Globals.canShoot == false)
+                    if (Globals.canShoot == false)
                     {
 
                         canvas_mainmenu.Visibility = Visibility.Hidden;
@@ -453,6 +453,7 @@ namespace U4_SpaceInvaders
             {
                 canvas_mainmenu.Children.Clear();
                 Globals.isMainMenuCreated = false;
+
 
                 this.Title = "Game Over!";
                 canvas_leaderboard.Visibility = Visibility.Visible;
@@ -588,6 +589,7 @@ namespace U4_SpaceInvaders
             canvas_leaderboard.Children.Clear();
             canvas_mainmenu.Children.Clear();
             Globals.isMainMenuCreated = false;
+            ResetGame();
             CreateMainMenu();
             gameState = GameState.MainMenu;
         }
@@ -651,8 +653,34 @@ namespace U4_SpaceInvaders
         public void ResetGame()
         {
             ResetRound();
+            ResetGlobals();
 
-            gameState = GameState.GameOver;
+            foreach(SP1Aliens sp1 in sp1Aliens)
+            {
+                sp1.destroy();
+                sp1aliensToDelete.Add(sp1);
+            }
+            foreach (SP2Aliens sp2 in sp2Aliens)
+            {
+                sp2.destroy();
+                sp2aliensToDelete.Add(sp2);
+            }
+            foreach (SP3Aliens sp3 in sp3Aliens)
+            {
+                sp3.destroy();
+                sp3aliensToDelete.Add(sp3);
+            }
+            foreach (Bullet b in bullets)
+            {
+                b.destroy();
+                bulletsToDelete.Add(b);
+            }
+            foreach (Enemy_Bullet e_b in enemy_Bullets)
+            {
+                e_b.destroy();
+                enemy_BulletsToDelete.Add(e_b);
+            }
+
         }
 
         private static void ResetGlobals()
@@ -668,6 +696,9 @@ namespace U4_SpaceInvaders
             Globals.areAliensCreated2 = false;
             Globals.areAliensCreated3 = false;
             Globals.areBunkersCreated = false;
+            Globals.isLeaderboardCreated = false;
+            Globals.btn_SubmitClicked = false;
+            Globals.areStatsEntered = false;
 
             Globals.currentScore = 0;
             Globals.currentLives = 3;
@@ -693,6 +724,31 @@ namespace U4_SpaceInvaders
                     foreach (SP1Aliens spA1 in sp1Aliens) { spA1.MoveDown(); }
                     foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
                     foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
+                }
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (sp1.collidesWith(bunk) == true)
+                    {
+                        if (Globals.currentLives > 1)
+                        {
+                            Globals.currentLives--;
+
+                            if (Globals.currentRound > 1)
+                            {
+                                Globals.currentRound--;
+                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                            }
+                            else if (Globals.currentRound == 1)
+                            {
+                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                            }
+
+                        }
+                        else if (Globals.currentLives == 1)
+                        {
+                            gameState = GameState.GameOver;
+                        }
+                    }
                 }
             }
             foreach (SP2Aliens sp2 in sp2Aliens)
@@ -778,6 +834,21 @@ namespace U4_SpaceInvaders
                     e_b.destroy();
                     enemy_BulletsToDelete.Add(e_b);
                     player.Shot();
+                }
+
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (e_b.collidesWith(bunk) == true)
+                    {
+                        e_b.destroy();
+                        bunk.damage();
+                        enemy_BulletsToDelete.Add(e_b);
+
+                        if (bunk.health == 1)
+                        {
+                            bunkersToDelete.Add(bunk);
+                        }
+                    }
                 }
             }
 
@@ -1014,7 +1085,7 @@ namespace U4_SpaceInvaders
 
         public static void WriteStats()
         {
-            
+
             //RefreshStats();
 
             //using (StreamWriter StatWriter = new StreamWriter("stats.txt", false))
@@ -1024,39 +1095,3 @@ namespace U4_SpaceInvaders
         }
     }
 }
-
-//Method involving adding a win to "wins.txt"
-//private static void AddWin()
-//{
-    //Uses a stream reader to read data from the text file "wins.txt"
-    //using (StreamReader WinReader = new StreamReader("wins.txt"))
-   // {
-        //Reads from "wins.txt and outputs an integer to Globals.SavedWins.
-       // int.TryParse(WinReader.ReadLine(), out Globals.SavedWins);
-        ////Closes the stream reader.
-       // WinReader.Close();
-       // //Writes a line to the console displaying the amount of saved wins in "wins.txt"
-        //Console.WriteLine("(Pre-win) Current saved wins in wins.txt = " + Globals.SavedWins);
-    //}
-
-    ////Uses a stream writer to write data to the text file "wins.txt"
-    //using (StreamWriter WinWriter = new StreamWriter("wins.txt"))
-    //{
-       // //Writes to "wins.txt" the amount stored in Globals.SavedWins + 1
-       // WinWriter.Write((Globals.SavedWins + 1));
-      //  WinWriter.Flush();
-      //  WinWriter.Close();
-      //  Console.WriteLine("(Post-win) Current saved wins in wins.txt = " + (Globals.SavedWins + 1));
-   // }
-//}
-
-//Method involving refreshing the amount of wins displayed at main menu.
-//private void RefreshWins()
-//{
-   // //Uses a stream reader to read data from the text file "wins.txt"
-   // using (StreamReader WinDisplay = new StreamReader("wins.txt"))
-   // {
-   //     //Displays the amount of wins at the main menu based upon the value stored in "wins.txt"
-   //     txt_WinCounter.Text = "Games Won Of Hangman Supreme: " + WinDisplay.ReadLine();
-   // }
-//}

@@ -81,7 +81,7 @@ namespace U4_SpaceInvaders
         public bool collidesWith(Bunker bunk)
         {
             if (this.boundingBox.X > (bunk.boundingBox.X - 8) && this.boundingBox.X < (bunk.boundingBox.X + 32)
-                && this.boundingBox.Y > (bunk.boundingBox.Y + 32) && this.boundingBox.Y < bunk.boundingBox.Y)
+                && this.boundingBox.Y < (bunk.boundingBox.Y + 64) && this.boundingBox.Y >  bunk.boundingBox.Y)
             {
                 return true;
             }

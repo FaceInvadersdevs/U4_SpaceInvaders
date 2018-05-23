@@ -70,10 +70,10 @@ namespace U4_SpaceInvaders
 
             rnumber = r.Next();
             var i = Util.GetRandom();
-            if (i == 100 + alienscreated)
+            if (i <= 2 + Globals.currentRound)
             {
                 r = new Random();
-                
+
                 window.CreateEnemyBullet(point);
             }
         }
@@ -86,7 +86,7 @@ namespace U4_SpaceInvaders
                 if (AlienMoveRight == true)
                 {
                     AlienMoveDown = true;
-                    point.X = point.X - 1;
+                    point.X = point.X - 3;
                 }
 
             }
@@ -95,7 +95,7 @@ namespace U4_SpaceInvaders
                 if (AlienMoveLeft == true)
                 {
                     AlienMoveDown = true;
-                    point.X = point.X + 1;
+                    point.X = point.X + 3;
                 }
             }
 
@@ -147,10 +147,21 @@ namespace U4_SpaceInvaders
             Globals.currentScore = Globals.currentScore + 8;
         }
 
+        public bool collidesWith(Bunker bunk)
+        {
+            if (this.boundingBox.X > (bunk.boundingBox.X - 8) && this.boundingBox.X < (bunk.boundingBox.X + 32)
+                && this.boundingBox.Y < (bunk.boundingBox.Y + 128) && this.boundingBox.Y > bunk.boundingBox.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
     }
 
 }
-
 
 

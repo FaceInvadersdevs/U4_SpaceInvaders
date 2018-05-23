@@ -68,7 +68,7 @@ namespace U4_SpaceInvaders
 
             rnumber = r.Next();
             var i = Util.GetRandom();
-            if (i == 300 + alienscreated)
+            if (i <= 2 + Globals.currentRound)
             {
                 r = new Random();
 
