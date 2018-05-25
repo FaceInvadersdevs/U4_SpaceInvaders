@@ -74,7 +74,7 @@ namespace U4_SpaceInvaders
             {
                 Globals.movecooldown++;
             }
-            if (Globals.shotcooldown < 30)
+            if (Globals.shotcooldown < 2)
             {
                 Globals.shotcooldown++;
             }
@@ -161,7 +161,7 @@ namespace U4_SpaceInvaders
             {
                 if (Globals.movecooldown == 10)
                 {
-                    if (Globals.shotcooldown == 30)
+                    if (Globals.shotcooldown == 2)
                     {
                         if (Globals.EasterEggActive == true)
                         {
@@ -184,7 +184,7 @@ namespace U4_SpaceInvaders
                     }
                 }
             }
-            if (Globals.shotcooldown > 15)
+            if (Globals.shotcooldown > 1)
             {
                 if (Keyboard.IsKeyUp(Key.Left))
                 {

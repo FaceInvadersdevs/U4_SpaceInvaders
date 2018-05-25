@@ -685,7 +685,6 @@ namespace U4_SpaceInvaders
 
         private static void ResetGlobals()
         {
-            Globals.EasterEggActive = false;
             Globals.musicPlaying = false;
             Globals.beginfade = false;
             Globals.canShoot = false;
@@ -760,6 +759,31 @@ namespace U4_SpaceInvaders
                     foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
                     foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
                 }
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (sp2.collidesWith(bunk) == true)
+                    {
+                        if (Globals.currentLives > 1)
+                        {
+                            Globals.currentLives--;
+
+                            if (Globals.currentRound > 1)
+                            {
+                                Globals.currentRound--;
+                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                            }
+                            else if (Globals.currentRound == 1)
+                            {
+                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                            }
+
+                        }
+                        else if (Globals.currentLives == 1)
+                        {
+                            gameState = GameState.GameOver;
+                        }
+                    }
+                }
             }
             foreach (SP3Aliens sp3 in sp3Aliens)
             {
@@ -769,6 +793,31 @@ namespace U4_SpaceInvaders
                     foreach (SP1Aliens spA1 in sp1Aliens) { spA1.MoveDown(); }
                     foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
                     foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
+                }
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (sp3.collidesWith(bunk) == true)
+                    {
+                        if (Globals.currentLives > 1)
+                        {
+                            Globals.currentLives--;
+
+                            if (Globals.currentRound > 1)
+                            {
+                                Globals.currentRound--;
+                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                            }
+                            else if (Globals.currentRound == 1)
+                            {
+                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                            }
+
+                        }
+                        else if (Globals.currentLives == 1)
+                        {
+                            gameState = GameState.GameOver;
+                        }
+                    }
                 }
             }
         }
@@ -848,6 +897,42 @@ namespace U4_SpaceInvaders
                         {
                             bunkersToDelete.Add(bunk);
                         }
+                    }
+                }
+            }
+
+            foreach (SP1Aliens sp1 in sp1Aliens)
+            {
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (sp1.collidesWith(bunk))
+                    {
+                        sp1aliensToDelete.Add(sp1);
+                        sp1.destroy();
+                    }
+                }
+            }
+
+            foreach (SP2Aliens sp2 in sp2Aliens)
+            {
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (sp2.collidesWith(bunk))
+                    {
+                        sp2aliensToDelete.Add(sp2);
+                        sp2.destroy();
+                    }
+                }
+            }
+
+            foreach (SP3Aliens sp3 in sp3Aliens)
+            {
+                foreach (Bunker bunk in bunkers)
+                {
+                    if (sp3.collidesWith(bunk))
+                    {
+                        sp3aliensToDelete.Add(sp3);
+                        sp3.destroy();
                     }
                 }
             }

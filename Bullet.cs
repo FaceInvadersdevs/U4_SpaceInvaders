@@ -55,7 +55,7 @@ namespace U4_SpaceInvaders
 
         public void Tick()
         {
-            point.Y = point.Y - 5;
+            point.Y = point.Y - 30;
             Canvas.SetTop(bulletRectangle, point.Y);
 
             box.Y = point.Y;

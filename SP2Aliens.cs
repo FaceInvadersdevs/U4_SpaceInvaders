@@ -150,6 +150,18 @@ namespace U4_SpaceInvaders
         }
 
 
+        public bool collidesWith(Bunker bunk)
+        {
+            if (this.boundingBox.Y < (bunk.boundingBox.Y + 32) && this.boundingBox.Y > bunk.boundingBox.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 
 }
