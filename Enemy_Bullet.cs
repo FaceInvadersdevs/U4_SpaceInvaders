@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,7 +69,7 @@ namespace U4_SpaceInvaders
 
         public bool collidesWith(Spaceship player)
         {
-            if (this.boundingBox.X > player.boundingBox.X+8 && this.boundingBox.X < (player.boundingBox.X + 54)
+            if (this.boundingBox.X > player.boundingBox.X + 8 && this.boundingBox.X < (player.boundingBox.X + 54)
                 && this.boundingBox.Y < (player.boundingBox.Y + 20) && this.boundingBox.Y > player.boundingBox.Y)
             {
                 return true;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -103,7 +103,7 @@ namespace U4_SpaceInvaders
         public static string fifth_p_name = "name";
         public static string fifth_p_stats = "Score: " + fifth_p_score.ToString() + "\nRound:" + fifth_p_round.ToString();
         public static string yourName;
-        public static string[] censoredwords = new string[33];
+        public static string[] censoredwords = new string[34];
 
 
         public static SoundPlayer musicPlayer = new SoundPlayer();
@@ -207,9 +207,9 @@ namespace U4_SpaceInvaders
             }
             Uri stats = new Uri(Globals.path + @"\Stats.txt");
 
-           // DirectorySecurity ds = Directory.GetAccessControl(Globals.path);
-           // ds.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-           // Directory.SetAccessControl(Globals.path, ds);
+            // DirectorySecurity ds = Directory.GetAccessControl(Globals.path);
+            // ds.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+            // Directory.SetAccessControl(Globals.path, ds);
 
 
             //start Timer
@@ -549,6 +549,7 @@ namespace U4_SpaceInvaders
 
         public void CreateLeaderboard(Rectangle leaderboard)
         {
+            ReadStats();
 
             if (Globals.areStatsEntered == false)
             {

@@ -142,7 +142,6 @@ namespace U4_SpaceInvaders
         public void destroy()
         {
             canvas.Children.Remove(AlienRectangle);
-            Globals.currentScore = Globals.currentScore + 2;
         }
 
 
