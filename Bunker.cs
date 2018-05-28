@@ -70,8 +70,15 @@ namespace U4_SpaceInvaders
                 bunkerRectangle.Fill = sprite_Bunker5;
             }
         }
+
+        public void destroy()
+        {
+            canvas.Children.Remove(bunkerRectangle);
+        }
     }
 }
+
+
 
 
 

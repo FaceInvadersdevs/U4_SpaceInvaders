@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,8 @@ namespace U4_SpaceInvaders
             window = w;
 
             point = startingpos;
+            point.X = startingpos.X + 28;
+            point.Y = startingpos.Y + 16;
             bulletPos = point;
             bulletRectangle = new Rectangle();
             bulletRectangle.Fill = Brushes.Red;
@@ -67,8 +70,8 @@ namespace U4_SpaceInvaders
 
         public bool collidesWith(Spaceship player)
         {
-            if (this.boundingBox.X > player.boundingBox.X && this.boundingBox.X < (player.boundingBox.X + 57)
-                && this.boundingBox.Y < (player.boundingBox.Y + 64) && this.boundingBox.Y > player.boundingBox.Y)
+            if (this.boundingBox.X > player.boundingBox.X+8 && this.boundingBox.X < (player.boundingBox.X + 54)
+                && this.boundingBox.Y < (player.boundingBox.Y + 20) && this.boundingBox.Y > player.boundingBox.Y)
             {
                 return true;
             }
@@ -81,7 +84,7 @@ namespace U4_SpaceInvaders
         public bool collidesWith(Bunker bunk)
         {
             if (this.boundingBox.X > (bunk.boundingBox.X - 8) && this.boundingBox.X < (bunk.boundingBox.X + 32)
-                && this.boundingBox.Y < (bunk.boundingBox.Y + 64) && this.boundingBox.Y >  bunk.boundingBox.Y)
+                && this.boundingBox.Y + 16 < (bunk.boundingBox.Y + 64) && this.boundingBox.Y + 16 > bunk.boundingBox.Y)
             {
                 return true;
             }

@@ -144,7 +144,6 @@ namespace U4_SpaceInvaders
         public void destroy()
         {
             canvas.Children.Remove(AlienRectangle);
-            Globals.currentScore = Globals.currentScore + 8;
         }
 
         public bool collidesWith(Bunker bunk)
@@ -162,5 +161,3 @@ namespace U4_SpaceInvaders
     }
 
 }
-
-

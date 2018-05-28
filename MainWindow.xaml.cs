@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Net;
+using System.Reflection;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -100,12 +103,16 @@ namespace U4_SpaceInvaders
         public static string fifth_p_name = "name";
         public static string fifth_p_stats = "Score: " + fifth_p_score.ToString() + "\nRound:" + fifth_p_round.ToString();
         public static string yourName;
+        public static string[] censoredwords = new string[30];
 
 
         public static SoundPlayer musicPlayer = new SoundPlayer();
         public static MediaPlayer effectPlayer = new MediaPlayer();
 
 
+        public static Assembly assembly = Assembly.GetExecutingAssembly();
+        public static string path = System.IO.Path.GetDirectoryName(assembly.Location);
+        //public static string path = @"C:\FaceInvaders";
 
         //sets brushes to be the same as the image specified
         public static ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri("Space Invaders.png", UriKind.Relative)));
@@ -188,11 +195,21 @@ namespace U4_SpaceInvaders
         List<SP2Aliens> sp2AlienShot = new List<SP2Aliens>();
         List<SP3Aliens> sp3AlienShot = new List<SP3Aliens>();
 
-
         public MainWindow()
         {
             InitializeComponent();
+            EasterEgg.Click += new RoutedEventHandler(Click_EasterEggTester);
             canvas_mainmenu.Visibility = Visibility.Visible;
+
+            if (!Directory.Exists(Globals.path))
+            {
+                Directory.CreateDirectory(Globals.path);
+            }
+            Uri stats = new Uri(Globals.path + @"\Stats.txt");
+
+            DirectorySecurity ds = Directory.GetAccessControl(Globals.path);
+            ds.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+            Directory.SetAccessControl(Globals.path, ds);
 
 
             //start Timer
@@ -204,8 +221,45 @@ namespace U4_SpaceInvaders
 
             ReadStats();
 
+            SetCensoredWords();
 
+        }
 
+        //Enter at your own risk. These are in place to prevent people from abusing the leaderboard system. No harm is meant in writing this code.
+        private static void SetCensoredWords()
+        {
+            //NOTE: These are in place so that the leaderboard system doesn't get abused.
+            //You have been warned.
+
+            Globals.censoredwords[0] = "FUCK";
+            Globals.censoredwords[1] = "SHIT";
+            Globals.censoredwords[2] = "BITCH";
+            Globals.censoredwords[3] = "CUNT";
+            Globals.censoredwords[4] = "CUM";
+            Globals.censoredwords[5] = "NIGGER";
+            Globals.censoredwords[6] = "NIGGA";
+            Globals.censoredwords[7] = "FVCK";
+            Globals.censoredwords[8] = "SH1T";
+            Globals.censoredwords[9] = "SH!T";
+            Globals.censoredwords[10] = "B1TCH";
+            Globals.censoredwords[11] = "B!TCH";
+            Globals.censoredwords[12] = "SLAVE";
+            Globals.censoredwords[13] = "WHORE";
+            Globals.censoredwords[14] = "MOLESTER";
+            Globals.censoredwords[15] = "RAPE";
+            Globals.censoredwords[16] = "RAPIST";
+            Globals.censoredwords[17] = "FUCKER";
+            Globals.censoredwords[18] = "FVCKER";
+            Globals.censoredwords[19] = "FVCK3R";
+            Globals.censoredwords[20] = "FUCK3R";
+            Globals.censoredwords[21] = "SLUT";
+            Globals.censoredwords[22] = "5LUT";
+            Globals.censoredwords[23] = "SKANK";
+            Globals.censoredwords[24] = "SHITHEAD";
+            Globals.censoredwords[25] = "FUCKA";
+            Globals.censoredwords[26] = "POT";
+            Globals.censoredwords[27] = "METH";
+            Globals.censoredwords[28] = "CRACK";
 
         }
 
@@ -229,17 +283,20 @@ namespace U4_SpaceInvaders
                 Globals.EasterEggActive = false;
                 ChangeMainMenuSprites();
             }
+            
         }
 
         private void CreateMainMenu()
         {
             ResetGlobals();
+
+
             MMSpaceship.Height = 128; MMSpaceship.Width = 128; Canvas.SetTop(MMSpaceship, 384); Canvas.SetLeft(MMSpaceship, 276);
             MMAlienSP1.Height = 128; MMAlienSP1.Width = 128; Canvas.SetTop(MMAlienSP1, 148); Canvas.SetLeft(MMAlienSP1, 176);
             MMAlienSP2.Height = 128; MMAlienSP2.Width = 128; Canvas.SetTop(MMAlienSP2, 148); Canvas.SetLeft(MMAlienSP2, 101);
             MMAlienSP3.Height = 128; MMAlienSP3.Width = 128; Canvas.SetTop(MMAlienSP3, 148); Canvas.SetLeft(MMAlienSP3, 451);
             MMAlienSP4.Height = 128; MMAlienSP4.Width = 128; Canvas.SetTop(MMAlienSP4, 148); Canvas.SetLeft(MMAlienSP4, 376);
-            EasterEgg.Height = 64; EasterEgg.Width = 128; Canvas.SetTop(EasterEgg, 510); Canvas.SetLeft(EasterEgg, 10); EasterEgg.Content = "Easter Egg Tester"; EasterEgg.Click += new RoutedEventHandler(Click_EasterEggTester);
+            EasterEgg.Height = 64; EasterEgg.Width = 128; Canvas.SetTop(EasterEgg, 510); Canvas.SetLeft(EasterEgg, 10); EasterEgg.Content = "Easter Egg Tester";
             txt_Begin.Width = 673; Canvas.SetTop(txt_Begin, 560); txt_Begin.Text = "Press 'Space' To Begin!"; txt_Begin.TextAlignment = TextAlignment.Center; txt_Begin.FontFamily = new FontFamily("Trajan Pro 3"); txt_Begin.FontSize = 20; txt_Begin.Foreground = Brushes.White;
 
             canvas_mainmenu.Children.Add(MMSpaceship);
@@ -472,10 +529,6 @@ namespace U4_SpaceInvaders
                     leaderboard.Fill = Globals.sprite_S_Leaderboard;
                 }
 
-                if (Globals.areStatsWriten == false)
-                {
-                    WriteStats();
-                }
 
                 if (Globals.isLeaderboardCreated == false)
                 {
@@ -538,7 +591,7 @@ namespace U4_SpaceInvaders
                 btn_submit.Height = 25; btn_submit.Width = 291; btn_submit.Content = "Submit"; Canvas.SetTop(btn_submit, 75); Canvas.SetLeft(btn_submit, 195); btn_submit.Click += new RoutedEventHandler(click_btnSubmit);
                 first_name.Height = 25; first_name.Width = 200; first_name.Text = Globals.first_p_name; Canvas.SetTop(first_name, 160); Canvas.SetLeft(first_name, 273); first_name.FontSize = 18; first_name.FontFamily = new FontFamily("Times New Roman");
                 first_stats.Height = 50; first_stats.Width = 200; first_stats.Text = Globals.first_p_stats; Canvas.SetTop(first_stats, 200); Canvas.SetLeft(first_stats, 273); first_stats.FontSize = 18; first_stats.FontFamily = new FontFamily("Times New Roman");
-                second_name.Height = 25; second_name.Width = 200; second_name.Text = Globals.second_p_name; Canvas.SetTop(second_name, 260); Canvas.SetLeft(second_name, 273); second_name.FontSize = 12; second_name.FontFamily = new FontFamily("Times New Roman");
+                second_name.Height = 25; second_name.Width = 200; second_name.Text = Globals.second_p_name; Canvas.SetTop(second_name, 262); Canvas.SetLeft(second_name, 273); second_name.FontSize = 12; second_name.FontFamily = new FontFamily("Times New Roman");
                 second_stats.Height = 25; second_stats.Width = 200; second_stats.Text = Globals.second_p_stats; Canvas.SetTop(second_stats, 300); Canvas.SetLeft(second_stats, 273); second_stats.FontSize = 12; second_stats.FontFamily = new FontFamily("Times New Roman");
                 third_name.Height = 25; third_name.Width = 200; third_name.Text = Globals.third_p_name; Canvas.SetTop(third_name, 335); Canvas.SetLeft(third_name, 273); third_name.FontSize = 12; third_name.FontFamily = new FontFamily("Times New Roman");
                 third_stats.Height = 25; third_stats.Width = 200; third_stats.Text = Globals.third_p_stats; Canvas.SetTop(third_stats, 375); Canvas.SetLeft(third_stats, 273); third_stats.FontSize = 12; third_stats.FontFamily = new FontFamily("Times New Roman");
@@ -596,17 +649,42 @@ namespace U4_SpaceInvaders
 
         public void SubmitClicked(Rectangle leaderboard)
         {
-            if (inpt_name.Text.Length < 11 && inpt_name.Text.Length > 2)
+            for (int i = 0; i <= 28; i++)
             {
-                Globals.areStatsEntered = true;
-                Globals.yourName = inpt_name.Text;
-                RefreshStats();
-                UpdateLeaderboard();
-                MessageBox.Show("Thanks " + Globals.yourName + ", for entering your name. The leaderboards should now be updated.");
+                if (inpt_name.Text.ToUpper() == Globals.censoredwords[i]) { inpt_name.Text = "Carebear #" + i; MessageBox.Show("YOU HAVE BEEN STRUCK BY THE BAN HAMMER! Jk, bruv chill on the harsh language, there might be little ones around. You will now be known in history as " + inpt_name.Text); }
             }
-            else
+            if(inpt_name.Text.Contains('%'))
             {
-                MessageBox.Show("Oops, something went wrong. Please try again.");
+                if (inpt_name.Text.Length < 15 && inpt_name.Text.Length > 1)
+                {
+                    string fixed_name = inpt_name.Text.Replace('%' , ' ');
+                    Globals.areStatsEntered = true;
+                    Globals.yourName = fixed_name;
+                    RefreshStats();
+                    UpdateLeaderboard();
+                    WriteStats();
+                    MessageBox.Show("Thanks " + Globals.yourName + ", for entering your name. The leaderboards should now be updated.");
+                }
+                else
+                {
+                    MessageBox.Show("Oops, something went wrong. Please try again.");
+                }
+            }
+            else if (!inpt_name.Text.Contains('%'))
+            {
+                if (inpt_name.Text.Length < 13 && inpt_name.Text.Length > 2 && !inpt_name.Text.Contains('.') && !inpt_name.Text.Contains('_'))
+                {
+                    Globals.areStatsEntered = true;
+                    Globals.yourName = inpt_name.Text;
+                    RefreshStats();
+                    UpdateLeaderboard();
+                    WriteStats();
+                    MessageBox.Show("Thanks " + Globals.yourName + ", for entering your name. The leaderboards should now be updated.");
+                }
+                else
+                {
+                    MessageBox.Show("Oops, something went wrong. Please try again.");
+                }
             }
             Globals.btn_SubmitClicked = false;
         }
@@ -624,7 +702,7 @@ namespace U4_SpaceInvaders
             }
         }
 
-        private void ResetRound()
+        public void ResetRound()
         {
             Globals.areAliensCreated = false;
             Globals.SP1AliensCreated = 0;
@@ -645,8 +723,24 @@ namespace U4_SpaceInvaders
                 enemy_BulletsToDelete.Add(e_b);
                 e_b.destroy();
             }
+            foreach (SP1Aliens sp1 in sp1Aliens)
+            {
+                sp1.destroy();
+                sp1aliensToDelete.Add(sp1);
+            }
+            foreach (SP2Aliens sp2 in sp2Aliens)
+            {
+                sp2.destroy();
+                sp2aliensToDelete.Add(sp2);
+            }
+            foreach (SP3Aliens sp3 in sp3Aliens)
+            {
+                sp3.destroy();
+                sp3aliensToDelete.Add(sp3);
+            }
 
-            BulletEventsAndCollison();
+
+            //BulletEventsAndCollison();
             CreateAliens();
         }
 
@@ -655,7 +749,7 @@ namespace U4_SpaceInvaders
             ResetRound();
             ResetGlobals();
 
-            foreach(SP1Aliens sp1 in sp1Aliens)
+            foreach (SP1Aliens sp1 in sp1Aliens)
             {
                 sp1.destroy();
                 sp1aliensToDelete.Add(sp1);
@@ -836,6 +930,7 @@ namespace U4_SpaceInvaders
                         sp1.destroy();
                         bulletsToDelete.Add(b);
                         sp1aliensToDelete.Add(sp1);
+                        Globals.currentScore = Globals.currentScore + 8;
                     }
                 }
                 foreach (SP2Aliens sp2 in sp2Aliens)
@@ -846,6 +941,7 @@ namespace U4_SpaceInvaders
                         sp2.destroy();
                         bulletsToDelete.Add(b);
                         sp2aliensToDelete.Add(sp2);
+                        Globals.currentScore = Globals.currentScore + 4;
                     }
                 }
                 foreach (SP3Aliens sp3 in sp3Aliens)
@@ -856,6 +952,7 @@ namespace U4_SpaceInvaders
                         sp3.destroy();
                         bulletsToDelete.Add(b);
                         sp3aliensToDelete.Add(sp3);
+                        Globals.currentScore = Globals.currentScore + 2;
                     }
                 }
                 foreach (Bunker bunk in bunkers)
@@ -955,6 +1052,7 @@ namespace U4_SpaceInvaders
             }
             foreach (Bunker bunk in bunkersToDelete)
             {
+                bunk.destroy();
                 bunkers.Remove(bunk);
             }
             foreach (Enemy_Bullet e_b in enemy_BulletsToDelete)
@@ -1031,9 +1129,13 @@ namespace U4_SpaceInvaders
 
         public static void ReadStats()
         {
-            using (StreamReader StatsReader = new StreamReader("stats.txt"))
+            WebClient wc = new WebClient();
+            wc.Credentials = new NetworkCredential("FaceInvader.Dev", "Icecream5*");
+            wc.DownloadFile(new Uri("ftp://ftp.drivehq.com/stats.txt"), Globals.path + @"\Stats.txt");
+
+            using (StreamReader StatsReader = new StreamReader(Globals.path + @"\Stats.txt"))
             {
-                using (StreamReader StatLineReader = new StreamReader("stats.txt"))
+                using (StreamReader StatLineReader = new StreamReader(Globals.path + @"\Stats.txt"))
                 {
                     string allLines = StatsReader.ReadToEnd();
                     for (int x = allLines.Count(i => i == '\n'); x > 0; x--)
@@ -1171,12 +1273,40 @@ namespace U4_SpaceInvaders
         public static void WriteStats()
         {
 
-            //RefreshStats();
-
-            //using (StreamWriter StatWriter = new StreamWriter("stats.txt", false))
+            using (StreamWriter StatWriter = new StreamWriter(Globals.path + @"\Stats.txt"))
             {
-                //StatWriter.Write(Globals.first_p_name);
+                StatWriter.WriteLine("1st");
+                StatWriter.WriteLine(Globals.first_p_name);
+                StatWriter.WriteLine(Globals.first_p_round);
+                StatWriter.WriteLine(Globals.first_p_score);
+                StatWriter.WriteLine("");
+                StatWriter.WriteLine("2nd");
+                StatWriter.WriteLine(Globals.second_p_name);
+                StatWriter.WriteLine(Globals.second_p_round);
+                StatWriter.WriteLine(Globals.second_p_score);
+                StatWriter.WriteLine("");
+                StatWriter.WriteLine("3rd");
+                StatWriter.WriteLine(Globals.third_p_name);
+                StatWriter.WriteLine(Globals.third_p_round);
+                StatWriter.WriteLine(Globals.third_p_score);
+                StatWriter.WriteLine("");
+                StatWriter.WriteLine("4th");
+                StatWriter.WriteLine(Globals.fourth_p_name);
+                StatWriter.WriteLine(Globals.fourth_p_round);
+                StatWriter.WriteLine(Globals.fourth_p_score);
+                StatWriter.WriteLine("");
+                StatWriter.WriteLine("5th");
+                StatWriter.WriteLine(Globals.fifth_p_name);
+                StatWriter.WriteLine(Globals.fifth_p_round);
+                StatWriter.WriteLine(Globals.fifth_p_score);
             }
+
+
+            WebClient wc = new WebClient();
+            wc.Credentials = new NetworkCredential("FaceInvader.Dev", "Icecream5*");
+            wc.UploadFile("ftp://ftp.drivehq.com/stats.txt", Globals.path + @"\Stats.txt");
+            // client.Credentials = new System.Net.NetworkCredential("JoshDegazio", "Icecream5*") ;
+
         }
     }
 }

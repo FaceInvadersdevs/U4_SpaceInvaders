@@ -74,7 +74,7 @@ namespace U4_SpaceInvaders
             {
                 Globals.movecooldown++;
             }
-            if (Globals.shotcooldown < 2)
+            if (Globals.shotcooldown < 30)
             {
                 Globals.shotcooldown++;
             }
@@ -161,7 +161,7 @@ namespace U4_SpaceInvaders
             {
                 if (Globals.movecooldown == 10)
                 {
-                    if (Globals.shotcooldown == 2)
+                    if (Globals.shotcooldown == 30)
                     {
                         if (Globals.EasterEggActive == true)
                         {
@@ -184,7 +184,7 @@ namespace U4_SpaceInvaders
                     }
                 }
             }
-            if (Globals.shotcooldown > 1)
+            if (Globals.shotcooldown > 15)
             {
                 if (Keyboard.IsKeyUp(Key.Left))
                 {
@@ -215,11 +215,15 @@ namespace U4_SpaceInvaders
                 if (Globals.currentRound > 1)
                 {
                     Globals.currentRound--;
-                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                    Globals.currentScore = Globals.currentScore - 100;
+                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, been set back a round and lost 100 score. Now get back out there and fight!");
+                    window.ResetRound();
                 }
                 else if (Globals.currentRound == 1)
                 {
-                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                    Globals.currentScore = Globals.currentScore - 100;
+                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life and lost 100 score. Now get back out there and fight!");
+                    window.ResetRound();
                 }
 
             }
