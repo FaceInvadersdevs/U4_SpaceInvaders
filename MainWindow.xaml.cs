@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -103,7 +103,7 @@ namespace U4_SpaceInvaders
         public static string fifth_p_name = "name";
         public static string fifth_p_stats = "Score: " + fifth_p_score.ToString() + "\nRound:" + fifth_p_round.ToString();
         public static string yourName;
-        public static string[] censoredwords = new string[30];
+        public static string[] censoredwords = new string[33];
 
 
         public static SoundPlayer musicPlayer = new SoundPlayer();
@@ -207,9 +207,9 @@ namespace U4_SpaceInvaders
             }
             Uri stats = new Uri(Globals.path + @"\Stats.txt");
 
-            DirectorySecurity ds = Directory.GetAccessControl(Globals.path);
-            ds.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-            Directory.SetAccessControl(Globals.path, ds);
+           // DirectorySecurity ds = Directory.GetAccessControl(Globals.path);
+           // ds.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+           // Directory.SetAccessControl(Globals.path, ds);
 
 
             //start Timer
@@ -260,7 +260,11 @@ namespace U4_SpaceInvaders
             Globals.censoredwords[26] = "POT";
             Globals.censoredwords[27] = "METH";
             Globals.censoredwords[28] = "CRACK";
-
+            Globals.censoredwords[29] = "ASS";
+            Globals.censoredwords[30] = "DUMBASS";
+            Globals.censoredwords[31] = "THOT";
+            Globals.censoredwords[32] = "TH0T";
+            Globals.censoredwords[33] = " BIG NIGGA";
         }
 
         public void CreatePlayer()
@@ -283,7 +287,7 @@ namespace U4_SpaceInvaders
                 Globals.EasterEggActive = false;
                 ChangeMainMenuSprites();
             }
-            
+
         }
 
         private void CreateMainMenu()
@@ -649,15 +653,15 @@ namespace U4_SpaceInvaders
 
         public void SubmitClicked(Rectangle leaderboard)
         {
-            for (int i = 0; i <= 28; i++)
+            for (int i = 0; i <= 32; i++)
             {
-                if (inpt_name.Text.ToUpper() == Globals.censoredwords[i]) { inpt_name.Text = "Carebear #" + i; MessageBox.Show("YOU HAVE BEEN STRUCK BY THE BAN HAMMER! Jk, bruv chill on the harsh language, there might be little ones around. You will now be known in history as " + inpt_name.Text); }
+                if (inpt_name.Text.ToUpper() == Globals.censoredwords[i]) { inpt_name.Text = "Carebear #" + i; MessageBox.Show("That is a Banned word. Your name will now be " + inpt_name.Text); }
             }
-            if(inpt_name.Text.Contains('%'))
+            if (inpt_name.Text.Contains('%'))
             {
                 if (inpt_name.Text.Length < 15 && inpt_name.Text.Length > 1)
                 {
-                    string fixed_name = inpt_name.Text.Replace('%' , ' ');
+                    string fixed_name = inpt_name.Text.Replace('%', ' ');
                     Globals.areStatsEntered = true;
                     Globals.yourName = fixed_name;
                     RefreshStats();
@@ -829,11 +833,11 @@ namespace U4_SpaceInvaders
                             if (Globals.currentRound > 1)
                             {
                                 Globals.currentRound--;
-                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                                MessageBox.Show("You have lost a life. You have lost points, and been set back 1 round.");
                             }
                             else if (Globals.currentRound == 1)
                             {
-                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                                MessageBox.Show("You have lost a life and 100 points.");
                             }
 
                         }
@@ -864,11 +868,11 @@ namespace U4_SpaceInvaders
                             if (Globals.currentRound > 1)
                             {
                                 Globals.currentRound--;
-                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                                MessageBox.Show("You have lost a life. You have lost points, and been set back 1 round.");
                             }
                             else if (Globals.currentRound == 1)
                             {
-                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                                MessageBox.Show("You have lost a life and 100 points");
                             }
 
                         }
@@ -899,11 +903,11 @@ namespace U4_SpaceInvaders
                             if (Globals.currentRound > 1)
                             {
                                 Globals.currentRound--;
-                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, and been set back a round. Now get back out there and fight!");
+                                MessageBox.Show("You have lost a life. You have lost points, and been set back 1 round.");
                             }
                             else if (Globals.currentRound == 1)
                             {
-                                MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life. Now get back out there and fight!");
+                                MessageBox.Show("You have lost a life and 100 points");
                             }
 
                         }
@@ -1272,6 +1276,7 @@ namespace U4_SpaceInvaders
 
         public static void WriteStats()
         {
+            ReadStats();
 
             using (StreamWriter StatWriter = new StreamWriter(Globals.path + @"\Stats.txt"))
             {
