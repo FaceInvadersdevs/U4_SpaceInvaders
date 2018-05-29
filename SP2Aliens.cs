@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -132,7 +132,7 @@ namespace U4_SpaceInvaders
             }
         }
 
-
+        // Moves down at Max / Min X valies
         public void MoveDown()
         {
             point.Y = point.Y + 64;
@@ -153,14 +153,14 @@ namespace U4_SpaceInvaders
 
         }
 
-
+        // Hit with bullet
         public void destroy()
         {
             canvas.Children.Remove(AlienRectangle);
             Globals.currentScore = Globals.currentScore + 4;
         }
 
-
+        // Create an duse Hitboxes
         public bool collidesWith(Bunker bunk)
         {
             if (this.boundingBox.Y < (bunk.boundingBox.Y + 32) && this.boundingBox.Y > bunk.boundingBox.Y)
