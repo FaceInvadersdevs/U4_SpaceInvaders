@@ -43,13 +43,14 @@ namespace U4_SpaceInvaders
 
 
 
-
+        //set gamestates
     public enum GameState { MainMenu, GameOn, GameOver }
 
 
-
+    //creates a global class for variables
     public static class Globals
     {
+        //bools
         public static bool EasterEggActive = false;
         public static bool musicPlaying = false;
         public static bool beginfade = false;
@@ -68,6 +69,7 @@ namespace U4_SpaceInvaders
         public static bool areStatsEntered = false;
         public static bool isMainMenuCreated = false;
 
+        //ints
         public static int currentScore = 0;
         public static int currentLives = 3;
         public static int currentRound = 1;
@@ -93,7 +95,7 @@ namespace U4_SpaceInvaders
         public static double Spaceship_x = 0;
         public static double AlienSpeed = 0;
 
-
+        //strings
         public static string first_p_name = "name";
         public static string first_p_stats = "Score: " + first_p_score.ToString() + "\nRound:" + first_p_round.ToString();
         public static string second_p_name = "name";
@@ -107,14 +109,13 @@ namespace U4_SpaceInvaders
         public static string yourName;
         public static string[] censoredwords = new string[34];
 
-
+        //creates effect and music players
         public static SoundPlayer musicPlayer = new SoundPlayer();
         public static MediaPlayer effectPlayer = new MediaPlayer();
 
-
+        //Creates directory in order to download and upload stats
         public static Assembly assembly = Assembly.GetExecutingAssembly();
         public static string path = System.IO.Path.GetDirectoryName(assembly.Location);
-        //public static string path = @"C:\FaceInvaders";
 
         //sets brushes to be the same as the image specified
         public static ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri("Space Invaders.png", UriKind.Relative)));
@@ -135,8 +136,10 @@ namespace U4_SpaceInvaders
 
     }
 
+    //Utility class
     public static class Util
     {
+        //Creates a random integer
         private static Random rnd = new Random();
         public static int GetRandom()
         {
@@ -150,12 +153,16 @@ namespace U4_SpaceInvaders
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        //creates a Gamestate enum called gamestate
         public GameState gameState;
 
+        //creates a gametimer used to replicate FPS
         System.Windows.Threading.DispatcherTimer gameTimer = new System.Windows.Threading.DispatcherTimer();
+
+        //Creates instance of player
         Spaceship player;
 
+        //Creates objects later used
         Rectangle MMSpaceship = new Rectangle();
         Rectangle MMAlienSP1 = new Rectangle();
         Rectangle MMAlienSP2 = new Rectangle();
@@ -179,6 +186,7 @@ namespace U4_SpaceInvaders
         public TextBlock your_stats = new TextBlock();
         public Button leave_Leaderboard = new Button();
 
+        //Creates lists for instances
         List<Bullet> bullets = new List<Bullet>();
         List<Enemy_Bullet> enemy_Bullets = new List<Enemy_Bullet>();
         List<Bunker> bunkers = new List<Bunker>();
@@ -187,6 +195,7 @@ namespace U4_SpaceInvaders
         List<SP3Aliens> sp3Aliens = new List<SP3Aliens>();
         List<SP4Aliens> sp4Aliens = new List<SP4Aliens>();
 
+        //Creates lists to destroy instances
         List<Bullet> bulletsToDelete = new List<Bullet>();
         List<Enemy_Bullet> enemy_BulletsToDelete = new List<Enemy_Bullet>();
         List<Bunker> bunkersToDelete = new List<Bunker>();
@@ -198,9 +207,12 @@ namespace U4_SpaceInvaders
         public MainWindow()
         {
             InitializeComponent();
+            //Create click event for the previously created button "Easter egg tester"
             EasterEgg.Click += new RoutedEventHandler(Click_EasterEggTester);
+            //Set main menu visibility to be visible
             canvas_mainmenu.Visibility = Visibility.Visible;
 
+            //If the directory in the debug folder doesn't exist, create it.
             if (!Directory.Exists(Globals.path))
             {
                 Directory.CreateDirectory(Globals.path);
@@ -212,11 +224,14 @@ namespace U4_SpaceInvaders
             gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
             gameTimer.Start();
 
+            //set enum gamestate, "gamestate" to be equal to the mainmenu state.
             gameState = GameState.MainMenu;
 
+            //Reads stats method
             ReadStats();
+            //Refresh stats method
             RefreshStats();
-
+            //Set censored words method
             SetCensoredWords();
 
         }
@@ -263,6 +278,7 @@ namespace U4_SpaceInvaders
             Globals.censoredwords[33] = "BIG NIGGA";
         }
 
+        //Create a new instance of player on the battleground canvas
         public void CreatePlayer()
         {
             player = new Spaceship(canvas_battleground, this);
@@ -840,6 +856,8 @@ namespace U4_SpaceInvaders
                         {
                             MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
                             player.Shot();
+                            sp1.destroy();
+                            sp1aliensToDelete.Add(sp1);
                         }
                     }
                 }
@@ -854,7 +872,7 @@ namespace U4_SpaceInvaders
 
                     foreach (SP4Aliens sp4 in sp4Aliens)
                     {
-                        if(sp1.boundingBox.Y > 190 && sp1.boundingBox.Y < 194)
+                        if (sp1.boundingBox.Y > 190 && sp1.boundingBox.Y < 194)
                         {
                             if (sp4.boundingBox.X <= -10 || sp4.boundingBox.X >= 600)
                             {
@@ -880,6 +898,8 @@ namespace U4_SpaceInvaders
                         {
                             MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
                             player.Shot();
+                            sp2.destroy();
+                            sp2aliensToDelete.Add(sp2);
                         }
                     }
                 }
@@ -899,6 +919,8 @@ namespace U4_SpaceInvaders
                     {
                         MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
                         player.Shot();
+                        sp3.destroy();
+                        sp3aliensToDelete.Add(sp3);
                     }
                 }
             }
@@ -1143,7 +1165,7 @@ namespace U4_SpaceInvaders
         {
             WebClient wc = new WebClient();
             wc.Credentials = new NetworkCredential("FaceInvader.Dev", "Icecream5*");
-            wc.DownloadFile(new Uri("ftp://ftp.drivehq.com/stats.txt"), Globals.path + @"\Stats.txt");
+            wc.DownloadFile("https://www.drivehq.com/file/DF.aspx/5232876766.txt?isGallery=&share=&shareID=0&fileID=5232876766&pay=&sesID=rqgcz1m4hz20as1k3oao2sen&forcedDownload=true", Globals.path + @"\Stats.txt");
 
             using (StreamReader StatsReader = new StreamReader(Globals.path + @"\Stats.txt"))
             {
