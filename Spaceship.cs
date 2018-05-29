@@ -216,13 +216,13 @@ namespace U4_SpaceInvaders
                 {
                     Globals.currentRound--;
                     Globals.currentScore = Globals.currentScore - 100;
-                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life, been set back a round and lost 100 score. Now get back out there and fight!");
+                    MessageBox.Show("You have lost your last life, 100 points, and been set back 1 round.");
                     window.ResetRound();
                 }
                 else if (Globals.currentRound == 1)
                 {
                     Globals.currentScore = Globals.currentScore - 100;
-                    MessageBox.Show("OH NO YOU DIED!1!1! How inconvenient :(. You have lost a life and lost 100 score. Now get back out there and fight!");
+                    MessageBox.Show("You have lost a life, 100 points, and been set back 1 round.");
                     window.ResetRound();
                 }
 

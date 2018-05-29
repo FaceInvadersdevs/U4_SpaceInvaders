@@ -41,7 +41,7 @@ namespace U4_SpaceInvaders
             canvas.Children.Add(bulletRectangle);
             Canvas.SetTop(bulletRectangle, point.Y);
             Canvas.SetLeft(bulletRectangle, point.X);
-            box = new Rect(point, new Size(8, 32));
+            box = new Rect(point, new Size (8,32));
 
             if (Globals.EasterEggActive == false)
             {
@@ -66,7 +66,7 @@ namespace U4_SpaceInvaders
         public bool collidesWith(SP1Aliens sp1)
         {
             if (this.boundingBox.X > sp1.boundingBox.X && this.boundingBox.X < (sp1.boundingBox.X + 57)
-                && this.boundingBox.Y < (sp1.boundingBox.Y + 64) && this.boundingBox.Y > sp1.boundingBox.Y)
+                && this.boundingBox.Y < (sp1.boundingBox.Y + 64) && this.boundingBox.Y > sp1.boundingBox.Y )
             {
                 return true;
             }
@@ -102,9 +102,22 @@ namespace U4_SpaceInvaders
             }
         }
 
+        public bool collidesWith(SP4Aliens sp4)
+        {
+            if (this.boundingBox.X > sp4.boundingBox.X && this.boundingBox.X < (sp4.boundingBox.X + 57)
+                && this.boundingBox.Y < (sp4.boundingBox.Y + 64) && this.boundingBox.Y > sp4.boundingBox.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool collidesWith(Bunker bunk)
         {
-            if (this.boundingBox.X > (bunk.boundingBox.X - 8) && this.boundingBox.X < (bunk.boundingBox.X + 32)
+            if (this.boundingBox.X > (bunk.boundingBox.X - 8)  && this.boundingBox.X < (bunk.boundingBox.X + 32)
                 && this.boundingBox.Y < (bunk.boundingBox.Y + 32) && this.boundingBox.Y > bunk.boundingBox.Y)
             {
                 return true;

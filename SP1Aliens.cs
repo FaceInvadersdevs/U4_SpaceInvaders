@@ -39,7 +39,19 @@ namespace U4_SpaceInvaders
             //Generate Alien
             canvas = c;
             window = w;
-            point = new Point(((64 * Globals.SP1AliensCreated) + 0), 0);
+
+            if ((Globals.currentRound % 2) == 1)
+            {
+                point = new Point((64 * Globals.SP1AliensCreated), 0);
+                AlienMoveLeft = false;
+                AlienMoveRight = true;
+            }
+            else if ((Globals.currentRound % 2) == 0)
+            {
+                point = new Point((512 - (64 * Globals.SP1AliensCreated)), 0);
+                AlienMoveRight = false;
+                AlienMoveLeft = true;
+            }
             AlienPos = point;
             AlienRectangle = new Rectangle();
             AlienRectangle.Fill = Brushes.Green;

@@ -60,6 +60,7 @@ namespace U4_SpaceInvaders
         public static bool areAliensCreated = false;
         public static bool areAliensCreated2 = false;
         public static bool areAliensCreated3 = false;
+        public static bool areAliensCreated4 = false;
         public static bool areBunkersCreated = false;
         public static bool isLeaderboardCreated = false;
         public static bool areStatsWriten = false;
@@ -76,6 +77,7 @@ namespace U4_SpaceInvaders
         public static int SP1AliensCreated = 0;
         public static int SP2AliensCreated = 0;
         public static int SP3AliensCreated = 0;
+        public static int SP4AliensCreated = 0;
         public static int BunkersCreated = 0;
         public static int first_p_score = 0;
         public static int first_p_round = 0;
@@ -183,6 +185,7 @@ namespace U4_SpaceInvaders
         List<SP1Aliens> sp1Aliens = new List<SP1Aliens>();
         List<SP2Aliens> sp2Aliens = new List<SP2Aliens>();
         List<SP3Aliens> sp3Aliens = new List<SP3Aliens>();
+        List<SP4Aliens> sp4Aliens = new List<SP4Aliens>();
 
         List<Bullet> bulletsToDelete = new List<Bullet>();
         List<Enemy_Bullet> enemy_BulletsToDelete = new List<Enemy_Bullet>();
@@ -190,10 +193,7 @@ namespace U4_SpaceInvaders
         List<SP1Aliens> sp1aliensToDelete = new List<SP1Aliens>();
         List<SP2Aliens> sp2aliensToDelete = new List<SP2Aliens>();
         List<SP3Aliens> sp3aliensToDelete = new List<SP3Aliens>();
-
-        List<SP1Aliens> sp1AlienShot = new List<SP1Aliens>();
-        List<SP2Aliens> sp2AlienShot = new List<SP2Aliens>();
-        List<SP3Aliens> sp3AlienShot = new List<SP3Aliens>();
+        List<SP4Aliens> sp4aliensToDelete = new List<SP4Aliens>();
 
         public MainWindow()
         {
@@ -207,11 +207,6 @@ namespace U4_SpaceInvaders
             }
             Uri stats = new Uri(Globals.path + @"\Stats.txt");
 
-            // DirectorySecurity ds = Directory.GetAccessControl(Globals.path);
-            // ds.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-            // Directory.SetAccessControl(Globals.path, ds);
-
-
             //start Timer
             gameTimer.Tick += gameTimer_Tick;
             gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
@@ -220,6 +215,7 @@ namespace U4_SpaceInvaders
             gameState = GameState.MainMenu;
 
             ReadStats();
+            RefreshStats();
 
             SetCensoredWords();
 
@@ -264,7 +260,7 @@ namespace U4_SpaceInvaders
             Globals.censoredwords[30] = "DUMBASS";
             Globals.censoredwords[31] = "THOT";
             Globals.censoredwords[32] = "TH0T";
-            Globals.censoredwords[33] = " BIG NIGGA";
+            Globals.censoredwords[33] = "BIG NIGGA";
         }
 
         public void CreatePlayer()
@@ -718,6 +714,9 @@ namespace U4_SpaceInvaders
             Globals.areAliensCreated3 = false;
             Globals.SP3AliensCreated = 0;
 
+            Globals.areAliensCreated4 = false;
+            Globals.SP4AliensCreated = 0;
+
             foreach (Bullet b in bullets)
             {
                 bulletsToDelete.Add(b);
@@ -743,9 +742,12 @@ namespace U4_SpaceInvaders
                 sp3.destroy();
                 sp3aliensToDelete.Add(sp3);
             }
+            foreach (SP4Aliens sp4 in sp4Aliens)
+            {
+                sp4.destroy();
+                sp4aliensToDelete.Add(sp4);
+            }
 
-
-            //BulletEventsAndCollison();
             CreateAliens();
         }
 
@@ -768,6 +770,11 @@ namespace U4_SpaceInvaders
             {
                 sp3.destroy();
                 sp3aliensToDelete.Add(sp3);
+            }
+            foreach (SP4Aliens sp4 in sp4Aliens)
+            {
+                sp4.destroy();
+                sp4aliensToDelete.Add(sp4);
             }
             foreach (Bullet b in bullets)
             {
@@ -793,6 +800,7 @@ namespace U4_SpaceInvaders
             Globals.areAliensCreated = false;
             Globals.areAliensCreated2 = false;
             Globals.areAliensCreated3 = false;
+            Globals.areAliensCreated4 = false;
             Globals.areBunkersCreated = false;
             Globals.isLeaderboardCreated = false;
             Globals.btn_SubmitClicked = false;
@@ -807,6 +815,7 @@ namespace U4_SpaceInvaders
             Globals.SP1AliensCreated = 0;
             Globals.SP2AliensCreated = 0;
             Globals.SP3AliensCreated = 0;
+            Globals.SP4AliensCreated = 0;
             Globals.BunkersCreated = 0;
             Globals.Spaceship_x = 0;
             Globals.AlienSpeed = 0;
@@ -823,28 +832,34 @@ namespace U4_SpaceInvaders
                     foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
                     foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
                 }
+
                 foreach (Bunker bunk in bunkers)
                 {
                     if (sp1.collidesWith(bunk) == true)
                     {
-                        if (Globals.currentLives > 1)
                         {
-                            Globals.currentLives--;
-
-                            if (Globals.currentRound > 1)
-                            {
-                                Globals.currentRound--;
-                                MessageBox.Show("You have lost a life. You have lost points, and been set back 1 round.");
-                            }
-                            else if (Globals.currentRound == 1)
-                            {
-                                MessageBox.Show("You have lost a life and 100 points.");
-                            }
-
+                            MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
+                            player.Shot();
                         }
-                        else if (Globals.currentLives == 1)
+                    }
+                }
+
+                if (Globals.areAliensCreated4 == false)
+                {
+                    if (sp1.boundingBox.Y > 126 && sp1.boundingBox.Y < 130)
+                    {
+                        sp4Aliens.Add(new SP4Aliens(canvas_battleground, this));
+                        Globals.SP4AliensCreated++;
+                    }
+
+                    foreach (SP4Aliens sp4 in sp4Aliens)
+                    {
+                        if(sp1.boundingBox.Y > 190 && sp1.boundingBox.Y < 194)
                         {
-                            gameState = GameState.GameOver;
+                            if (sp4.boundingBox.X <= -10 || sp4.boundingBox.X >= 600)
+                            {
+                                Globals.areAliensCreated4 = false;
+                            }
                         }
                     }
                 }
@@ -862,24 +877,9 @@ namespace U4_SpaceInvaders
                 {
                     if (sp2.collidesWith(bunk) == true)
                     {
-                        if (Globals.currentLives > 1)
                         {
-                            Globals.currentLives--;
-
-                            if (Globals.currentRound > 1)
-                            {
-                                Globals.currentRound--;
-                                MessageBox.Show("You have lost a life. You have lost points, and been set back 1 round.");
-                            }
-                            else if (Globals.currentRound == 1)
-                            {
-                                MessageBox.Show("You have lost a life and 100 points");
-                            }
-
-                        }
-                        else if (Globals.currentLives == 1)
-                        {
-                            gameState = GameState.GameOver;
+                            MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
+                            player.Shot();
                         }
                     }
                 }
@@ -897,26 +897,18 @@ namespace U4_SpaceInvaders
                 {
                     if (sp3.collidesWith(bunk) == true)
                     {
-                        if (Globals.currentLives > 1)
-                        {
-                            Globals.currentLives--;
-
-                            if (Globals.currentRound > 1)
-                            {
-                                Globals.currentRound--;
-                                MessageBox.Show("You have lost a life. You have lost points, and been set back 1 round.");
-                            }
-                            else if (Globals.currentRound == 1)
-                            {
-                                MessageBox.Show("You have lost a life and 100 points");
-                            }
-
-                        }
-                        else if (Globals.currentLives == 1)
-                        {
-                            gameState = GameState.GameOver;
-                        }
+                        MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
+                        player.Shot();
                     }
+                }
+            }
+            foreach (SP4Aliens sp4 in sp4Aliens)
+            {
+                sp4.Tick();
+                if (sp4.boundingBox.X <= -10 || sp4.boundingBox.X >= 600)
+                {
+                    sp4aliensToDelete.Add(sp4);
+                    sp4.destroy();
                 }
             }
         }
@@ -958,6 +950,17 @@ namespace U4_SpaceInvaders
                         bulletsToDelete.Add(b);
                         sp3aliensToDelete.Add(sp3);
                         Globals.currentScore = Globals.currentScore + 2;
+                    }
+                }
+                foreach (SP4Aliens sp4 in sp4Aliens)
+                {
+                    if (b.collidesWith(sp4) == true)
+                    {
+                        b.destroy();
+                        sp4.destroy();
+                        bulletsToDelete.Add(b);
+                        sp4aliensToDelete.Add(sp4);
+                        Globals.currentScore = Globals.currentScore + (((1 + Globals.SP4AliensCreated) * Globals.currentRound * Globals.currentLives) - (5 * Globals.currentLives));
                     }
                 }
                 foreach (Bunker bunk in bunkers)
@@ -1054,6 +1057,10 @@ namespace U4_SpaceInvaders
             foreach (SP3Aliens sp3 in sp3aliensToDelete)
             {
                 sp3Aliens.Remove(sp3);
+            }
+            foreach (SP4Aliens sp4 in sp4aliensToDelete)
+            {
+                sp4Aliens.Remove(sp4);
             }
             foreach (Bunker bunk in bunkersToDelete)
             {
@@ -1199,8 +1206,6 @@ namespace U4_SpaceInvaders
                 Console.WriteLine(Globals.fifth_p_name);
                 Console.WriteLine(Globals.fifth_p_round.ToString());
                 Console.WriteLine(Globals.fifth_p_score.ToString());
-
-                RefreshStats();
             }
         }
 
@@ -1278,6 +1283,7 @@ namespace U4_SpaceInvaders
         public static void WriteStats()
         {
             ReadStats();
+            RefreshStats();
 
             using (StreamWriter StatWriter = new StreamWriter(Globals.path + @"\Stats.txt"))
             {
@@ -1311,7 +1317,6 @@ namespace U4_SpaceInvaders
             WebClient wc = new WebClient();
             wc.Credentials = new NetworkCredential("FaceInvader.Dev", "Icecream5*");
             wc.UploadFile("ftp://ftp.drivehq.com/stats.txt", Globals.path + @"\Stats.txt");
-            // client.Credentials = new System.Net.NetworkCredential("JoshDegazio", "Icecream5*") ;
 
         }
     }

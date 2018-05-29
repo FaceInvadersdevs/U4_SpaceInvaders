@@ -38,7 +38,18 @@ namespace U4_SpaceInvaders
             //Generate Alien
             canvas = c;
             window = w;
-            point = new Point((64 * Globals.SP3AliensCreated), 128);
+            if ((Globals.currentRound % 2) == 1)
+            {
+                point = new Point((64 * Globals.SP3AliensCreated), 128);
+                AlienMoveLeft = false;
+                AlienMoveRight = true;
+            }
+            else if ((Globals.currentRound % 2) == 0)
+            {
+                point = new Point((512 - (64 * Globals.SP3AliensCreated)), 128);
+                AlienMoveRight = false;
+                AlienMoveLeft = true;
+            }
             AlienPos = point;
             AlienRectangle = new Rectangle();
             AlienRectangle.Fill = Brushes.Green;
@@ -142,6 +153,7 @@ namespace U4_SpaceInvaders
         public void destroy()
         {
             canvas.Children.Remove(AlienRectangle);
+            Globals.currentScore = Globals.currentScore + 2;
         }
 
 
