@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace U4_SpaceInvaders
 {
-    class SP1Aliens
+    class SP2Aliens
     {
         //Generate Player Variables
         Point AlienPos = new Point();
@@ -26,29 +26,28 @@ namespace U4_SpaceInvaders
         public bool AlienMoveRight = true;
         public bool AlienMoveLeft = false;
         int rnumber;
-        int alienscreated = Globals.SP1AliensCreated;
-        Random r = new Random(5);
+        int alienscreated = Globals.SP2AliensCreated;
+        Random r = new Random(3);
 
 
         //Create Sprites
-        ImageBrush sprite_SP1alien = new ImageBrush(new BitmapImage(new Uri("Alien SP1.png", UriKind.Relative)));
-        ImageBrush sprite_LittleGreen = new ImageBrush(new BitmapImage(new Uri("Dranino.png", UriKind.Relative)));
+        ImageBrush sprite_SP2alien = new ImageBrush(new BitmapImage(new Uri("Alien SP2.png", UriKind.Relative)));
+        ImageBrush sprite_BigGreen = new ImageBrush(new BitmapImage(new Uri("Dracadre.png", UriKind.Relative)));
 
-        public SP1Aliens(Canvas c, MainWindow w)
+        public SP2Aliens(Canvas c, MainWindow w)
         {
             //Generate Alien
             canvas = c;
             window = w;
-
             if ((Globals.currentRound % 2) == 1)
             {
-                point = new Point((64 * Globals.SP1AliensCreated), 0);
+                point = new Point((64 * Globals.SP2AliensCreated), 64);
                 AlienMoveLeft = false;
                 AlienMoveRight = true;
             }
             else if ((Globals.currentRound % 2) == 0)
             {
-                point = new Point((512 - (64 * Globals.SP1AliensCreated)), 0);
+                point = new Point((512 - (64 * Globals.SP2AliensCreated)), 64);
                 AlienMoveRight = false;
                 AlienMoveLeft = true;
             }
@@ -60,25 +59,26 @@ namespace U4_SpaceInvaders
             canvas.Children.Add(AlienRectangle);
             Canvas.SetTop(AlienRectangle, point.Y);
             Canvas.SetLeft(AlienRectangle, point.X);
-            Globals.SP1AliensCreated++;
+            Globals.SP2AliensCreated++;
             box = new Rect(point, new Size(64, 64));
-            int rOthernumber = r.Next();
 
             //Sprites
             if (Globals.EasterEggActive == false)
             {
-                AlienRectangle.Fill = sprite_LittleGreen;
+                AlienRectangle.Fill = sprite_BigGreen;
             }
             else if (Globals.EasterEggActive == true)
             {
-                AlienRectangle.Fill = sprite_SP1alien;
+                AlienRectangle.Fill = sprite_SP2alien;
             }
 
         }
 
+
         public void Tick()
         {
             Movement();
+
 
             rnumber = r.Next();
             var i = Util.GetRandom();
@@ -98,7 +98,7 @@ namespace U4_SpaceInvaders
                 if (AlienMoveRight == true)
                 {
                     AlienMoveDown = true;
-                    point.X = point.X - 3;
+                    point.X = point.X - 1;
                 }
 
             }
@@ -107,7 +107,7 @@ namespace U4_SpaceInvaders
                 if (AlienMoveLeft == true)
                 {
                     AlienMoveDown = true;
-                    point.X = point.X + 3;
+                    point.X = point.X + 1;
                 }
             }
 
@@ -132,6 +132,7 @@ namespace U4_SpaceInvaders
             }
         }
 
+        // Moves down at Max / Min X valies
         public void MoveDown()
         {
             point.Y = point.Y + 64;
@@ -152,12 +153,14 @@ namespace U4_SpaceInvaders
 
         }
 
-
+        // Hit with bullet
         public void destroy()
         {
             canvas.Children.Remove(AlienRectangle);
+            Globals.currentScore = Globals.currentScore + 4;
         }
 
+        // Create an duse Hitboxes
         public bool collidesWith(Bunker bunk)
         {
             if (this.boundingBox.Y < (bunk.boundingBox.Y + 32) && this.boundingBox.Y > bunk.boundingBox.Y)
