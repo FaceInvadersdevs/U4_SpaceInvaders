@@ -43,7 +43,7 @@ namespace U4_SpaceInvaders
 
 
 
-        //set gamestates
+    //set gamestates
     public enum GameState { MainMenu, GameOn, GameOver }
 
 
@@ -68,6 +68,7 @@ namespace U4_SpaceInvaders
         public static bool btn_SubmitClicked = false;
         public static bool areStatsEntered = false;
         public static bool isMainMenuCreated = false;
+        public static bool areBunkersBreached = false;
 
         //ints
         public static int currentScore = 0;
@@ -116,6 +117,7 @@ namespace U4_SpaceInvaders
         //Creates directory in order to download and upload stats
         public static Assembly assembly = Assembly.GetExecutingAssembly();
         public static string path = System.IO.Path.GetDirectoryName(assembly.Location);
+        public static Uri statspath = new Uri("ftp://ftp.ezyro.com/htdocs/stats.txt");
 
         //sets brushes to be the same as the image specified
         public static ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri("Space Invaders.png", UriKind.Relative)));
@@ -146,7 +148,6 @@ namespace U4_SpaceInvaders
             return rnd.Next(1, (6001 - (Globals.currentRound * 10)));
         }
     }
-
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -851,14 +852,12 @@ namespace U4_SpaceInvaders
 
                 foreach (Bunker bunk in bunkers)
                 {
-                    if (sp1.collidesWith(bunk) == true)
+                    if (sp1.collidesWith(bunk))
                     {
-                        {
-                            MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
-                            player.Shot();
-                            sp1.destroy();
-                            sp1aliensToDelete.Add(sp1);
-                        }
+                        sp1aliensToDelete.Add(sp1);
+                        sp1.destroy();
+                        MessageBox.Show("The bunkers have been breached by the 1st species of Aliens!");
+                        Globals.areBunkersBreached = true;
                     }
                 }
 
@@ -893,14 +892,12 @@ namespace U4_SpaceInvaders
                 }
                 foreach (Bunker bunk in bunkers)
                 {
-                    if (sp2.collidesWith(bunk) == true)
+                    if (sp2.collidesWith(bunk))
                     {
-                        {
-                            MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
-                            player.Shot();
-                            sp2.destroy();
-                            sp2aliensToDelete.Add(sp2);
-                        }
+                        sp2aliensToDelete.Add(sp2);
+                        sp2.destroy();
+                        MessageBox.Show("The bunkers have been breached by the 2nd species of Aliens!");
+                        Globals.areBunkersBreached = true;
                     }
                 }
             }
@@ -915,12 +912,12 @@ namespace U4_SpaceInvaders
                 }
                 foreach (Bunker bunk in bunkers)
                 {
-                    if (sp3.collidesWith(bunk) == true)
+                    if (sp3.collidesWith(bunk))
                     {
-                        MessageBox.Show("The bunkers have been breached, humanity has been lost. GAME OV3R");
-                        player.Shot();
-                        sp3.destroy();
                         sp3aliensToDelete.Add(sp3);
+                        sp3.destroy();
+                        MessageBox.Show("The bunkers have been breached by the 3rd species of Aliens!");
+                        Globals.areBunkersBreached = true;
                     }
                 }
             }
@@ -932,6 +929,12 @@ namespace U4_SpaceInvaders
                     sp4aliensToDelete.Add(sp4);
                     sp4.destroy();
                 }
+            }
+
+            if(Globals.areBunkersBreached == true)
+            {
+                Globals.areBunkersBreached = false;
+                player.Shot();
             }
         }
 
@@ -949,7 +952,7 @@ namespace U4_SpaceInvaders
                         sp1.destroy();
                         bulletsToDelete.Add(b);
                         sp1aliensToDelete.Add(sp1);
-                        Globals.currentScore = Globals.currentScore + 8;
+                        Globals.currentScore = Globals.currentScore + 4 + (Globals.currentLives * 2) + Globals.currentRound;
                     }
                 }
                 foreach (SP2Aliens sp2 in sp2Aliens)
@@ -960,7 +963,7 @@ namespace U4_SpaceInvaders
                         sp2.destroy();
                         bulletsToDelete.Add(b);
                         sp2aliensToDelete.Add(sp2);
-                        Globals.currentScore = Globals.currentScore + 4;
+                        Globals.currentScore = Globals.currentScore + 2 + (Globals.currentLives * 2) + Globals.currentRound;
                     }
                 }
                 foreach (SP3Aliens sp3 in sp3Aliens)
@@ -971,7 +974,7 @@ namespace U4_SpaceInvaders
                         sp3.destroy();
                         bulletsToDelete.Add(b);
                         sp3aliensToDelete.Add(sp3);
-                        Globals.currentScore = Globals.currentScore + 2;
+                        Globals.currentScore = Globals.currentScore + 1 + (Globals.currentLives * 2) + Globals.currentRound;
                     }
                 }
                 foreach (SP4Aliens sp4 in sp4Aliens)
@@ -1028,41 +1031,6 @@ namespace U4_SpaceInvaders
                 }
             }
 
-            foreach (SP1Aliens sp1 in sp1Aliens)
-            {
-                foreach (Bunker bunk in bunkers)
-                {
-                    if (sp1.collidesWith(bunk))
-                    {
-                        sp1aliensToDelete.Add(sp1);
-                        sp1.destroy();
-                    }
-                }
-            }
-
-            foreach (SP2Aliens sp2 in sp2Aliens)
-            {
-                foreach (Bunker bunk in bunkers)
-                {
-                    if (sp2.collidesWith(bunk))
-                    {
-                        sp2aliensToDelete.Add(sp2);
-                        sp2.destroy();
-                    }
-                }
-            }
-
-            foreach (SP3Aliens sp3 in sp3Aliens)
-            {
-                foreach (Bunker bunk in bunkers)
-                {
-                    if (sp3.collidesWith(bunk))
-                    {
-                        sp3aliensToDelete.Add(sp3);
-                        sp3.destroy();
-                    }
-                }
-            }
 
             foreach (Bullet b in bulletsToDelete)
             {
@@ -1163,9 +1131,10 @@ namespace U4_SpaceInvaders
 
         public static void ReadStats()
         {
+
             WebClient wc = new WebClient();
-            wc.Credentials = new NetworkCredential("FaceInvader.Dev", "Icecream5*");
-            wc.DownloadFile("https://www.drivehq.com/file/DF.aspx/5232876766.txt?isGallery=&share=&shareID=0&fileID=5232876766&pay=&sesID=rqgcz1m4hz20as1k3oao2sen&forcedDownload=true", Globals.path + @"\Stats.txt");
+            wc.Credentials = new NetworkCredential(@"ezyro_22162395".Normalize(), @"Icecream5*".Normalize());
+            wc.DownloadFile(Globals.statspath, Globals.path + @"\Stats.txt");
 
             using (StreamReader StatsReader = new StreamReader(Globals.path + @"\Stats.txt"))
             {
@@ -1335,10 +1304,9 @@ namespace U4_SpaceInvaders
                 StatWriter.WriteLine(Globals.fifth_p_score);
             }
 
-
             WebClient wc = new WebClient();
-            wc.Credentials = new NetworkCredential("FaceInvader.Dev", "Icecream5*");
-            wc.UploadFile("ftp://ftp.drivehq.com/stats.txt", Globals.path + @"\Stats.txt");
+            wc.Credentials = new NetworkCredential(@"ezyro_22162395".Normalize(), @"Icecream5*".Normalize());
+            wc.UploadFile(Globals.statspath, Globals.path + @"\Stats.txt");
 
         }
     }

@@ -61,7 +61,7 @@ namespace U4_SpaceInvaders
             }
 
         }
-
+        //Cool down from shot
         public void Tick()
         {
             Globals.Spaceship_x = playerPos.X;
@@ -82,6 +82,7 @@ namespace U4_SpaceInvaders
 
         public void PlayerControls()
         {
+            //Move player left
             if (Keyboard.IsKeyDown(Key.Left))
             {
                 if (Globals.movecooldown == 10)
@@ -110,6 +111,7 @@ namespace U4_SpaceInvaders
 
                         }
                     }
+                    //Making borders
                     else if (Globals.blockleft == true)
                     {
                         if (playerPos.X > 8)
@@ -120,6 +122,7 @@ namespace U4_SpaceInvaders
                     }
                 }
             }
+            //Move player right
             else if (Keyboard.IsKeyDown(Key.Right))
             {
                 if (Globals.movecooldown == 10)
@@ -147,6 +150,7 @@ namespace U4_SpaceInvaders
 
                         }
                     }
+                    //Making borders
                     else if (Globals.blockright == true)
                     {
                         if (playerPos.X < 592)
@@ -157,6 +161,7 @@ namespace U4_SpaceInvaders
                     }
                 }
             }
+            //Shoot method
             if (Keyboard.IsKeyDown(Key.Space) || Keyboard.IsKeyDown(Key.Space) && Keyboard.IsKeyDown(Key.Right) || Keyboard.IsKeyDown(Key.Space) && Keyboard.IsKeyDown(Key.Left))
             {
                 if (Globals.movecooldown == 10)
@@ -184,6 +189,7 @@ namespace U4_SpaceInvaders
                     }
                 }
             }
+
             if (Globals.shotcooldown > 15)
             {
                 if (Keyboard.IsKeyUp(Key.Left))
@@ -216,19 +222,22 @@ namespace U4_SpaceInvaders
                 {
                     Globals.currentRound--;
                     Globals.currentScore = Globals.currentScore - 100;
-                    MessageBox.Show("You have lost your last life, 100 points, and been set back 1 round.");
+                    MessageBox.Show("You have lost a life, 100 points, and been set back 1 round.");
                     window.ResetRound();
                 }
                 else if (Globals.currentRound == 1)
                 {
                     Globals.currentScore = Globals.currentScore - 100;
-                    MessageBox.Show("You have lost a life, 100 points, and been set back 1 round.");
+                    MessageBox.Show("You have lost a last life, and 100 points.");
                     window.ResetRound();
                 }
 
             }
             else if (Globals.currentLives == 1)
             {
+                Globals.currentScore = Globals.currentScore - 100;
+                Globals.currentRound--;
+                MessageBox.Show("You have lost your last life, 100 points, and been set back 1 round.");
                 window.gameState = GameState.GameOver;
             }
         }

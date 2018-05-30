@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -160,10 +160,10 @@ namespace U4_SpaceInvaders
             Globals.currentScore = Globals.currentScore + 4;
         }
 
-        // Create an duse Hitboxes
+        // Create and use Hitboxes
         public bool collidesWith(Bunker bunk)
         {
-            if (this.boundingBox.Y < (bunk.boundingBox.Y + 32) && this.boundingBox.Y > bunk.boundingBox.Y)
+            if (this.boundingBox.Y < (500 + 32) && this.boundingBox.Y > 500)
             {
                 return true;
             }
