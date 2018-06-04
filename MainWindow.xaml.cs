@@ -1,4 +1,11 @@
-﻿using System;
+﻿
+/*
+ *Josh Degazio - Colin Jones - Kyler Campbell - Bradley Miller
+ *Feb 8, 2018
+ *Output
+ *User inputs a "name", the system then greets the user, using their name
+*/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,9 +43,6 @@ namespace U4_SpaceInvaders
     // "In celebration of GDC 2018 we are giving away 30GB+ of high-quality sound effects from our catalog. 
     // Everything is royalty-free and commercially usable. No attribution is required and you can use them 
     // on an unlimited number of projects for the rest of your lifetime. - https://sonniss.com/gameaudiogdc18/
-    //
-    // Boi by Kyler Campbell,
-    // This effect was recorded by us. Therefore we own it.
 
 
 
@@ -120,21 +124,21 @@ namespace U4_SpaceInvaders
         public static Uri statspath = new Uri("ftp://ftp.ezyro.com/htdocs/stats.txt");
 
         //sets brushes to be the same as the image specified
-        public static ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri("Space Invaders.png", UriKind.Relative)));
-        public static ImageBrush sprite_S_AlienSP1 = new ImageBrush(new BitmapImage(new Uri("Dranino.png", UriKind.Relative)));
-        public static ImageBrush sprite_S_AlienSP2 = new ImageBrush(new BitmapImage(new Uri("Dracadre.png", UriKind.Relative)));
-        public static ImageBrush sprite_S_AlienSP3 = new ImageBrush(new BitmapImage(new Uri("Draconus.png", UriKind.Relative)));
-        public static ImageBrush sprite_S_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Draxxor.png", UriKind.Relative)));
-        public static ImageBrush sprite_S_Spaceship = new ImageBrush(new BitmapImage(new Uri("Spaceship.png", UriKind.Relative)));
-        public static ImageBrush sprite_F_MMBackground = new ImageBrush(new BitmapImage(new Uri("Face Invaders.png", UriKind.Relative)));
-        public static ImageBrush sprite_F_AlienSP1 = new ImageBrush(new BitmapImage(new Uri("Alien SP1.png", UriKind.Relative)));
-        public static ImageBrush sprite_F_AlienSP2 = new ImageBrush(new BitmapImage(new Uri("Alien SP2.png", UriKind.Relative)));
-        public static ImageBrush sprite_F_AlienSP3 = new ImageBrush(new BitmapImage(new Uri("Alien SP3.png", UriKind.Relative)));
-        public static ImageBrush sprite_F_AlienSP4 = new ImageBrush(new BitmapImage(new Uri("Alien SP4.png", UriKind.Relative)));
-        public static ImageBrush sprite_F_Spaceship = new ImageBrush(new BitmapImage(new Uri("Faceship.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_MMBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Space Invaders.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP1 = new ImageBrush(new BitmapImage(new Uri(@"Images\Dranino.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP2 = new ImageBrush(new BitmapImage(new Uri(@"Images\Dracadre.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP3 = new ImageBrush(new BitmapImage(new Uri(@"Images\Draconus.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_AlienSP4 = new ImageBrush(new BitmapImage(new Uri(@"Images\Draxxor.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_Spaceship = new ImageBrush(new BitmapImage(new Uri(@"Images\Spaceship.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_MMBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\Face Invaders.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP1 = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP2 = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP2.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP3 = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP3.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_AlienSP4 = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP4.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_Spaceship = new ImageBrush(new BitmapImage(new Uri(@"Images\Faceship.png", UriKind.Relative)));
 
-        public static ImageBrush sprite_S_Leaderboard = new ImageBrush(new BitmapImage(new Uri("S_Leaderboard.png", UriKind.Relative)));
-        public static ImageBrush sprite_F_Leaderboard = new ImageBrush(new BitmapImage(new Uri("F_Leaderboard.png", UriKind.Relative)));
+        public static ImageBrush sprite_S_Leaderboard = new ImageBrush(new BitmapImage(new Uri(@"Images\S_Leaderboard.png", UriKind.Relative)));
+        public static ImageBrush sprite_F_Leaderboard = new ImageBrush(new BitmapImage(new Uri(@"Images\F_Leaderboard.png", UriKind.Relative)));
 
     }
 
@@ -308,13 +312,13 @@ namespace U4_SpaceInvaders
             ResetGlobals();
 
 
-            MMSpaceship.Height = 128; MMSpaceship.Width = 128; Canvas.SetTop(MMSpaceship, 384); Canvas.SetLeft(MMSpaceship, 276);
+            MMSpaceship.Height = 128; MMSpaceship.Width = 128; Canvas.SetTop(MMSpaceship, 384); Canvas.SetLeft(MMSpaceship, 267);
             MMAlienSP1.Height = 128; MMAlienSP1.Width = 128; Canvas.SetTop(MMAlienSP1, 148); Canvas.SetLeft(MMAlienSP1, 176);
             MMAlienSP2.Height = 128; MMAlienSP2.Width = 128; Canvas.SetTop(MMAlienSP2, 148); Canvas.SetLeft(MMAlienSP2, 101);
             MMAlienSP3.Height = 128; MMAlienSP3.Width = 128; Canvas.SetTop(MMAlienSP3, 148); Canvas.SetLeft(MMAlienSP3, 451);
             MMAlienSP4.Height = 128; MMAlienSP4.Width = 128; Canvas.SetTop(MMAlienSP4, 148); Canvas.SetLeft(MMAlienSP4, 376);
-            EasterEgg.Height = 64; EasterEgg.Width = 128; Canvas.SetTop(EasterEgg, 510); Canvas.SetLeft(EasterEgg, 10); EasterEgg.Content = "Easter Egg Tester";
-            txt_Begin.Width = 673; Canvas.SetTop(txt_Begin, 560); txt_Begin.Text = "Press 'Space' To Begin!"; txt_Begin.TextAlignment = TextAlignment.Center; txt_Begin.FontFamily = new FontFamily("Trajan Pro 3"); txt_Begin.FontSize = 20; txt_Begin.Foreground = Brushes.White;
+            EasterEgg.Height = 64; EasterEgg.Width = 128; Canvas.SetTop(EasterEgg, 510); Canvas.SetLeft(EasterEgg, 10); EasterEgg.Content = "Enable Face-eggedon";
+            txt_Begin.Width = 260; Canvas.SetTop(txt_Begin, 530); Canvas.SetLeft(txt_Begin, 198); txt_Begin.Text = "Press 'Space' To Begin!"; txt_Begin.TextAlignment = TextAlignment.Center; txt_Begin.FontFamily = new FontFamily("Trajan Pro 3"); txt_Begin.FontSize = 20; txt_Begin.Foreground = Brushes.White;
 
             canvas_mainmenu.Children.Add(MMSpaceship);
             canvas_mainmenu.Children.Add(MMAlienSP1);
@@ -341,6 +345,7 @@ namespace U4_SpaceInvaders
                 MMAlienSP3.Fill = Globals.sprite_S_AlienSP3;
                 MMAlienSP4.Fill = Globals.sprite_S_AlienSP4;
                 MMSpaceship.Fill = Globals.sprite_S_Spaceship;
+                EasterEgg.Content = "Enable Face-eggedon";
             }
             else if (Globals.EasterEggActive == true)
             {
@@ -351,6 +356,7 @@ namespace U4_SpaceInvaders
                 MMAlienSP3.Fill = Globals.sprite_F_AlienSP3;
                 MMAlienSP4.Fill = Globals.sprite_F_AlienSP4;
                 MMSpaceship.Fill = Globals.sprite_F_Spaceship;
+                EasterEgg.Content = "Enable Space-eggedon";
             }
         }
 
@@ -362,13 +368,16 @@ namespace U4_SpaceInvaders
             //Gamestate check and update
             Gamestates();
 
+            //Control the fading of 'press space to start'
             FadeBeginText();
         }
 
+        //Control the fading of 'press space to start'
         private void FadeBeginText()
         {
             if (gameState == GameState.MainMenu)
             {
+                //Fade out
                 if (Globals.beginfade == false)
                 {
                     if (txt_Begin.Opacity != 0 || txt_Begin.Opacity >= 1)
@@ -380,6 +389,7 @@ namespace U4_SpaceInvaders
                         Globals.beginfade = true;
                     }
                 }
+                //Fade in
                 if (Globals.beginfade == true)
                 {
                     if (txt_Begin.Opacity != 1 || txt_Begin.Opacity >= 0)
@@ -394,17 +404,21 @@ namespace U4_SpaceInvaders
             }
         }
 
+        //plays music specific to gamestates
         private void MusicEvents()
         {
             if (gameState == GameState.MainMenu)
             {
                 if (Globals.musicPlaying == false)
                 {
+                    //Stops any previous music from playing
                     Globals.musicPlayer.Stop();
-                    Uri music = new Uri("mainmenu.wav", UriKind.Relative);
+                    //Begins playing mainmenu song on loop
+                    Uri music = new Uri(@"Sounds\mainmenu.wav", UriKind.Relative);
                     Globals.musicPlayer.SoundLocation = music.ToString();
                     Globals.musicPlayer.PlayLooping();
 
+                    //Sets bool to true
                     Globals.musicPlaying = true;
                 }
             }
@@ -412,42 +426,52 @@ namespace U4_SpaceInvaders
             {
                 if (Globals.musicPlaying == false)
                 {
+                    //Stops any previous music from playing
                     Globals.musicPlayer.Stop();
-                    Uri music = new Uri("playgame.wav", UriKind.Relative);
+                    //Begins playing mainmenu song on loop
+                    Uri music = new Uri(@"Sounds\playgame.wav", UriKind.Relative);
                     Globals.musicPlayer.SoundLocation = music.ToString();
                     Globals.musicPlayer.PlayLooping();
 
+                    //Sets bool to true
                     Globals.musicPlaying = true;
                 }
             }
         }
 
+        //Gamestate check and update
         public void Gamestates()
         {
 
             //mainmenu tick events
             if (gameState == GameState.MainMenu)
             {
+                //Clear previous canvases
                 canvas_leaderboard.Children.Clear();
                 canvas_battleground.Children.Clear();
                 canvas_mainmenu.Visibility = Visibility.Visible;
+                //Set title to main menu
                 this.Title = "Main Menu";
 
+                //Create mainmenu objects
                 if (Globals.isMainMenuCreated == false)
                 {
                     CreateMainMenu();
                 }
 
+                //Check and set values
                 if (Globals.areStatsWriten == true)
                 {
                     Globals.areStatsWriten = false;
                 }
 
+                //Check and set values
                 if (Globals.isLeaderboardCreated == true)
                 {
                     Globals.isLeaderboardCreated = false;
                 }
 
+                //Plays soundeffect upon pressing specified key.
                 if (Keyboard.IsKeyDown(Key.Space))
                 {
                     if (Globals.canShoot == false)
@@ -471,72 +495,62 @@ namespace U4_SpaceInvaders
             //during-game tick events
             else if (gameState == GameState.GameOn)
             {
+                //Clears previous canvas
                 canvas_mainmenu.Children.Clear();
                 Globals.isMainMenuCreated = false;
 
+                //Sets current canvas to visible.
                 canvas_battleground.Visibility = Visibility.Visible;
+                //Sets title to show stats.
                 this.Title = "Round: " + Globals.currentRound.ToString() + " - Score: " + Globals.currentScore.ToString() + " - Lives: " + Globals.currentLives.ToString();
 
-                // SP 1-4 Aliens below
-
-                ImageBrush sprite_battleBackground = new ImageBrush(new BitmapImage(new Uri("BattleBackground.png", UriKind.Relative)));
+                //Loads background image/sprite
+                ImageBrush sprite_battleBackground = new ImageBrush(new BitmapImage(new Uri(@"Images\BattleBackground.png", UriKind.Relative)));
                 canvas_battleground.Background = sprite_battleBackground;
 
+                //Creates spaceship instance
                 if (Globals.playerCreated == false)
                 {
                     CreatePlayer();
                 }
 
 
-
+                //Tick events
                 player.Tick();
                 BulletEventsAndCollison();
                 CreateAliens();
                 CreateBunkers();
                 AliensTick();
 
+                //Check if round over
                 RoundOver();
 
-                if (Keyboard.IsKeyDown(Key.Enter))
-                {
-                    if (gameState == GameState.MainMenu)
-                    {
-                        gameState = GameState.GameOn;
-                        Globals.musicPlaying = false;
-                    }
-                    else if (gameState == GameState.GameOn)
-                    {
-                        gameState = GameState.MainMenu;
-                        Globals.musicPlaying = false;
-
-                        player.destroy();
-                        Globals.playerCreated = false;
-
-                        canvas_battleground.Visibility = Visibility.Hidden;
-                    }
-                }
-
+                //Secret pause button
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
-                    MessageBox.Show(Globals.AlienSpeed.ToString());
+                    MessageBox.Show("You've found a secret pause button. You're pretty cool!");
                 }
             }
 
             //end game tick events
             else if (gameState == GameState.GameOver)
             {
+                //Clear previous canvas
                 canvas_mainmenu.Children.Clear();
                 Globals.isMainMenuCreated = false;
 
-
+                //Set title
                 this.Title = "Game Over!";
                 canvas_leaderboard.Visibility = Visibility.Visible;
 
+                //Create leaderboard
                 Rectangle leaderboard = new Rectangle();
                 leaderboard.Height = 480;
                 leaderboard.Width = 380;
                 Canvas.SetTop(leaderboard, 100);
                 Canvas.SetLeft(leaderboard, 150);
+
+                //Set leaderboard visuals
                 if (Globals.EasterEggActive == true)
                 {
                     leaderboard.Fill = Globals.sprite_F_Leaderboard;
@@ -547,6 +561,7 @@ namespace U4_SpaceInvaders
                 }
 
 
+                //Create leaderboard instance/objects
                 if (Globals.isLeaderboardCreated == false)
                 {
                     CreateLeaderboard(leaderboard);
@@ -562,8 +577,10 @@ namespace U4_SpaceInvaders
 
         public void CreateLeaderboard(Rectangle leaderboard)
         {
+            //Reads stats from stats.txt
             ReadStats();
 
+            //Adds objects
             if (Globals.areStatsEntered == false)
             {
                 UpdateLeaderboard();
@@ -585,6 +602,7 @@ namespace U4_SpaceInvaders
                 canvas_leaderboard.Children.Add(your_stats);
             }
 
+            //Removes objects and prepares for switch to main menu
             else if (Globals.areStatsEntered == true)
             {
                 leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 575); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
@@ -639,6 +657,7 @@ namespace U4_SpaceInvaders
                 your_stats.Height = 25; your_stats.Width = 200; your_stats.Text = "Score: " + Globals.currentScore + "\nRound: " + Globals.currentRound; Canvas.SetTop(your_stats, 525); Canvas.SetLeft(your_stats, 273); your_stats.FontSize = 12; your_stats.FontFamily = new FontFamily("Times New Roman");
                 leave_Leaderboard.Height = 25; leave_Leaderboard.Width = 291; leave_Leaderboard.Content = "Main Menu"; Canvas.SetTop(leave_Leaderboard, 575); Canvas.SetLeft(leave_Leaderboard, 195); leave_Leaderboard.Click += new RoutedEventHandler(click_leaveLeaderboard);
 
+                //Remove unnecessary objects
                 canvas_leaderboard.Children.Remove(txt_name);
                 canvas_leaderboard.Children.Remove(inpt_name);
                 canvas_leaderboard.Children.Remove(btn_submit);
@@ -648,17 +667,21 @@ namespace U4_SpaceInvaders
 
         public void click_btnSubmit(object sender, RoutedEventArgs e)
         {
+            //Plot twist
             Globals.btn_SubmitClicked = true;
         }
 
         public void click_leaveLeaderboard(object sender, RoutedEventArgs e)
         {
+            //Changes visibility
             canvas_mainmenu.Visibility = Visibility.Visible;
             canvas_leaderboard.Visibility = Visibility.Hidden;
             canvas_battleground.Visibility = Visibility.Hidden;
+            //Clears unnecessary objects
             canvas_battleground.Children.Clear();
             canvas_leaderboard.Children.Clear();
             canvas_mainmenu.Children.Clear();
+            //Prepares for mainmenu creation
             Globals.isMainMenuCreated = false;
             ResetGame();
             CreateMainMenu();
@@ -667,27 +690,36 @@ namespace U4_SpaceInvaders
 
         public void SubmitClicked(Rectangle leaderboard)
         {
+            //Check for validation of entered name / compare with censored words
             for (int i = 0; i <= 32; i++)
             {
+                //If censored word appears, change name to something stupid
                 if (inpt_name.Text.ToUpper() == Globals.censoredwords[i]) { inpt_name.Text = "Carebear #" + i; MessageBox.Show("That is a Banned word. Your name will now be " + inpt_name.Text); }
             }
             if (inpt_name.Text.Contains('%'))
             {
+                //Allows for secret names that only people who know the trick, can use.
                 if (inpt_name.Text.Length < 15 && inpt_name.Text.Length > 1)
                 {
-                    string fixed_name = inpt_name.Text.Replace('%', ' ');
+                    //Fix name
+                    string fixed_name = inpt_name.Text.Remove('%');
+                    //Set name and stats
                     Globals.areStatsEntered = true;
                     Globals.yourName = fixed_name;
+                    //Methods to update and refresh. Stay relevant
                     RefreshStats();
                     UpdateLeaderboard();
                     WriteStats();
+                    //Tell player that the game is functioning properly
                     MessageBox.Show("Thanks " + Globals.yourName + ", for entering your name. The leaderboards should now be updated.");
                 }
                 else
                 {
+                    //Give the player no clue as to what they did wrong.
                     MessageBox.Show("Oops, something went wrong. Please try again.");
                 }
             }
+            //Standard names
             else if (!inpt_name.Text.Contains('%'))
             {
                 if (inpt_name.Text.Length < 13 && inpt_name.Text.Length > 2 && !inpt_name.Text.Contains('.') && !inpt_name.Text.Contains('_'))
@@ -710,10 +742,13 @@ namespace U4_SpaceInvaders
 
         private void RoundOver()
         {
+            //Checks if no aliens exist
             if (sp1Aliens.Count() == 0 && sp2Aliens.Count() == 0 && sp3Aliens.Count() == 0)
             {
+                //Tell player they're doing well, despite the impending doom
                 MessageBox.Show("You successfully completed round " + Globals.currentRound + ", with a total of " + Globals.currentLives + " lives. The next round will begin after you close this box.");
 
+                //Adjust stats
                 Globals.currentRound = Globals.currentRound + 1;
                 Globals.currentScore = Globals.currentScore + (5 * Globals.currentRound);
                 ResetRound();
@@ -722,6 +757,7 @@ namespace U4_SpaceInvaders
 
         public void ResetRound()
         {
+            //Reset aliens
             Globals.areAliensCreated = false;
             Globals.SP1AliensCreated = 0;
 
@@ -734,6 +770,7 @@ namespace U4_SpaceInvaders
             Globals.areAliensCreated4 = false;
             Globals.SP4AliensCreated = 0;
 
+            //Reset Lists
             foreach (Bullet b in bullets)
             {
                 bulletsToDelete.Add(b);
@@ -765,14 +802,17 @@ namespace U4_SpaceInvaders
                 sp4aliensToDelete.Add(sp4);
             }
 
+            //Create Aliens. pretty obvious
             CreateAliens();
         }
 
         public void ResetGame()
         {
+            //Methods that help reset the game!
             ResetRound();
             ResetGlobals();
 
+            //Reset lists
             foreach (SP1Aliens sp1 in sp1Aliens)
             {
                 sp1.destroy();
@@ -808,6 +848,7 @@ namespace U4_SpaceInvaders
 
         private static void ResetGlobals()
         {
+            //Reset important global variables
             Globals.musicPlaying = false;
             Globals.beginfade = false;
             Globals.canShoot = false;
@@ -842,9 +883,12 @@ namespace U4_SpaceInvaders
         {
             foreach (SP1Aliens sp1 in sp1Aliens)
             {
+                //Run tick events per alien instance
                 sp1.Tick();
+                //If any alien should move down
                 if (sp1.AlienMoveDown == true)
                 {
+                    //For each alien that exists, move down.
                     foreach (SP1Aliens spA1 in sp1Aliens) { spA1.MoveDown(); }
                     foreach (SP2Aliens spA2 in sp2Aliens) { spA2.MoveDown(); }
                     foreach (SP3Aliens spA3 in sp3Aliens) { spA3.MoveDown(); }
@@ -852,11 +896,15 @@ namespace U4_SpaceInvaders
 
                 foreach (Bunker bunk in bunkers)
                 {
+                    //if any alien collides with any bunker
                     if (sp1.collidesWith(bunk))
                     {
+                        //delete them boys
                         sp1aliensToDelete.Add(sp1);
                         sp1.destroy();
+                        //Tell the player they would've died if this game was real
                         MessageBox.Show("The bunkers have been breached by the 1st species of Aliens!");
+                        //Set bool to true
                         Globals.areBunkersBreached = true;
                     }
                 }
@@ -923,17 +971,22 @@ namespace U4_SpaceInvaders
             }
             foreach (SP4Aliens sp4 in sp4Aliens)
             {
+                //Tick 
                 sp4.Tick();
-                if (sp4.boundingBox.X <= -10 || sp4.boundingBox.X >= 600)
+                //Check if alien is outside window
+                if (sp4.boundingBox.X <= -20 || sp4.boundingBox.X >= 610)
                 {
+                    //Delete this boi
                     sp4aliensToDelete.Add(sp4);
                     sp4.destroy();
                 }
             }
 
+            //If bunkers get breached
             if(Globals.areBunkersBreached == true)
             {
                 Globals.areBunkersBreached = false;
+                //Act as if player got shot
                 player.Shot();
             }
         }
@@ -942,16 +995,22 @@ namespace U4_SpaceInvaders
         {
             foreach (Bullet b in bullets)
             {
+                //Tick per bullet
                 b.Tick();
 
                 foreach (SP1Aliens sp1 in sp1Aliens)
                 {
+                    //If any bullet collides with any SP1Alien
                     if (b.collidesWith(sp1) == true)
                     {
+                        //Destroy self
                         b.destroy();
+                        //Destroy alien that self collided with
                         sp1.destroy();
+                        //Remove both from canvas
                         bulletsToDelete.Add(b);
                         sp1aliensToDelete.Add(sp1);
+                        //Add score accordingly
                         Globals.currentScore = Globals.currentScore + 4 + (Globals.currentLives * 2) + Globals.currentRound;
                     }
                 }
@@ -992,12 +1051,16 @@ namespace U4_SpaceInvaders
                 {
                     if (b.collidesWith(bunk) == true)
                     {
+                        //Destroy bullet
                         b.destroy();
+                        //Deal damage to bunk
                         bunk.damage();
                         bulletsToDelete.Add(b);
 
+                        //If bunk has no health left
                         if (bunk.health == 1)
                         {
+                            //remove this boi
                             bunkersToDelete.Add(bunk);
                         }
                     }
@@ -1031,7 +1094,7 @@ namespace U4_SpaceInvaders
                 }
             }
 
-
+            //For each object in delete list, remove from canvas
             foreach (Bullet b in bulletsToDelete)
             {
                 bullets.Remove(b);

@@ -24,8 +24,8 @@ namespace U4_SpaceInvaders
         public Rect boundingBox { get => box; }
         Rect box;
 
-        ImageBrush sprite_S_Bullet = new ImageBrush(new BitmapImage(new Uri("Spaceship_Bullet.png", UriKind.Relative)));
-        ImageBrush sprite_F_Bullet = new ImageBrush(new BitmapImage(new Uri("Faceship_Bullet.png", UriKind.Relative)));
+        ImageBrush sprite_S_Bullet = new ImageBrush(new BitmapImage(new Uri(@"Images\Spaceship_Bullet.png", UriKind.Relative)));
+        ImageBrush sprite_F_Bullet = new ImageBrush(new BitmapImage(new Uri(@"Images\Faceship_Bullet.png", UriKind.Relative)));
 
         public Bullet(Canvas c, MainWindow w)
         {

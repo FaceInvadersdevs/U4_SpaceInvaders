@@ -31,8 +31,8 @@ namespace U4_SpaceInvaders
 
 
         //Create Sprites
-        ImageBrush sprite_SP1alien = new ImageBrush(new BitmapImage(new Uri("Alien SP1.png", UriKind.Relative)));
-        ImageBrush sprite_LittleGreen = new ImageBrush(new BitmapImage(new Uri("Dranino.png", UriKind.Relative)));
+        ImageBrush sprite_SP1alien = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP1.png", UriKind.Relative)));
+        ImageBrush sprite_LittleGreen = new ImageBrush(new BitmapImage(new Uri(@"Images\Dranino.png", UriKind.Relative)));
 
         public SP1Aliens(Canvas c, MainWindow w)
         {

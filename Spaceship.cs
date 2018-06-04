@@ -25,15 +25,15 @@ namespace U4_SpaceInvaders
         Rect box;
 
         //Create Sprites
-        ImageBrush sprite_F_MoveLeft = new ImageBrush(new BitmapImage(new Uri("Faceship_Move_Left.png", UriKind.Relative)));
-        ImageBrush sprite_F_MoveRight = new ImageBrush(new BitmapImage(new Uri("Faceship_Move_Right.png", UriKind.Relative)));
-        ImageBrush sprite_F_FaceShoot = new ImageBrush(new BitmapImage(new Uri("Faceship_Shoot.png", UriKind.Relative)));
-        ImageBrush sprite_F_Spaceship = new ImageBrush(new BitmapImage(new Uri("Faceship.png", UriKind.Relative)));
+        ImageBrush sprite_F_MoveLeft = new ImageBrush(new BitmapImage(new Uri(@"Images\Faceship_Move_Left.png", UriKind.Relative)));
+        ImageBrush sprite_F_MoveRight = new ImageBrush(new BitmapImage(new Uri(@"Images\Faceship_Move_Right.png", UriKind.Relative)));
+        ImageBrush sprite_F_FaceShoot = new ImageBrush(new BitmapImage(new Uri(@"Images\Faceship_Shoot.png", UriKind.Relative)));
+        ImageBrush sprite_F_Spaceship = new ImageBrush(new BitmapImage(new Uri(@"Images\Faceship.png", UriKind.Relative)));
 
-        ImageBrush sprite_S_MoveLeft = new ImageBrush(new BitmapImage(new Uri("Spaceship_Move_Left.png", UriKind.Relative)));
-        ImageBrush sprite_S_MoveRight = new ImageBrush(new BitmapImage(new Uri("Spaceship_Move_Right.png", UriKind.Relative)));
-        ImageBrush sprite_S_SpaceShoot = new ImageBrush(new BitmapImage(new Uri("Spaceship_Shoot.png", UriKind.Relative)));
-        ImageBrush sprite_S_Spaceship = new ImageBrush(new BitmapImage(new Uri("Spaceship.png", UriKind.Relative)));
+        ImageBrush sprite_S_MoveLeft = new ImageBrush(new BitmapImage(new Uri(@"Images\Spaceship_Move_Left.png", UriKind.Relative)));
+        ImageBrush sprite_S_MoveRight = new ImageBrush(new BitmapImage(new Uri(@"Images\Spaceship_Move_Right.png", UriKind.Relative)));
+        ImageBrush sprite_S_SpaceShoot = new ImageBrush(new BitmapImage(new Uri(@"Images\Spaceship_Shoot.png", UriKind.Relative)));
+        ImageBrush sprite_S_Spaceship = new ImageBrush(new BitmapImage(new Uri(@"Images\Spaceship.png", UriKind.Relative)));
 
         public Spaceship(Canvas c, MainWindow w)
         {
@@ -173,7 +173,7 @@ namespace U4_SpaceInvaders
                             window.CreateBullet();
                             Globals.movecooldown = 0;
                             Globals.shotcooldown = 0;
-                            Globals.effectPlayer.Open(new Uri("boiShoot.wav", UriKind.Relative));
+                            Globals.effectPlayer.Open(new Uri(@"Sounds\boiShoot.wav", UriKind.Relative));
                             Globals.effectPlayer.Play();
                             playerRectangle.Fill = sprite_F_FaceShoot;
                         }
@@ -182,7 +182,7 @@ namespace U4_SpaceInvaders
                             window.CreateBullet();
                             Globals.movecooldown = 0;
                             Globals.shotcooldown = 0;
-                            Globals.effectPlayer.Open(new Uri("SpaceShoot.wav", UriKind.Relative));
+                            Globals.effectPlayer.Open(new Uri(@"Sounds\SpaceShoot.wav", UriKind.Relative));
                             Globals.effectPlayer.Play();
                             playerRectangle.Fill = sprite_S_SpaceShoot;
                         }

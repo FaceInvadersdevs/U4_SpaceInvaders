@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,6 @@ namespace U4_SpaceInvaders
 {
     class Enemy_Bullet
     {
-        Spaceship player;
         Point bulletPos = new Point();
         private Point point;
         public Point Point { get => point; }
@@ -24,8 +24,8 @@ namespace U4_SpaceInvaders
         public Rect boundingBox { get => box; }
         Rect box;
 
-        ImageBrush sprite_S_Bullet = new ImageBrush(new BitmapImage(new Uri("Enemy_Bullet.png", UriKind.Relative)));
-        ImageBrush sprite_F_Bullet = new ImageBrush(new BitmapImage(new Uri("Enemy_Bullet.png", UriKind.Relative)));
+        ImageBrush sprite_S_Bullet = new ImageBrush(new BitmapImage(new Uri(@"Images\Enemy_Bullet.png", UriKind.Relative)));
+        ImageBrush sprite_F_Bullet = new ImageBrush(new BitmapImage(new Uri(@"Images\Enemy_Bullet.png", UriKind.Relative)));
 
         public Enemy_Bullet(Canvas c, MainWindow w, Point startingpos)
         {
@@ -69,8 +69,8 @@ namespace U4_SpaceInvaders
 
         public bool collidesWith(Spaceship player)
         {
-            if (this.boundingBox.X > player.boundingBox.X + 8 && this.boundingBox.X < (player.boundingBox.X + 54)
-                && this.boundingBox.Y < (player.boundingBox.Y + 20) && this.boundingBox.Y > player.boundingBox.Y)
+            if (this.boundingBox.X > player.boundingBox.X + 4 && this.boundingBox.X < (player.boundingBox.X + 60)
+                && this.boundingBox.Y < (player.boundingBox.Y + 15) && this.boundingBox.Y > player.boundingBox.Y)
             {
                 return true;
             }

@@ -26,11 +26,11 @@ namespace U4_SpaceInvaders
 
 
         //Create Sprites
-        ImageBrush sprite_Bunker1 = new ImageBrush(new BitmapImage(new Uri("Bunker1.png", UriKind.Relative)));
-        ImageBrush sprite_Bunker2 = new ImageBrush(new BitmapImage(new Uri("Bunker2.png", UriKind.Relative)));
-        ImageBrush sprite_Bunker3 = new ImageBrush(new BitmapImage(new Uri("Bunker3.png", UriKind.Relative)));
-        ImageBrush sprite_Bunker4 = new ImageBrush(new BitmapImage(new Uri("Bunker4.png", UriKind.Relative)));
-        ImageBrush sprite_Bunker5 = new ImageBrush(new BitmapImage(new Uri("Bunker5.png", UriKind.Relative)));
+        ImageBrush sprite_Bunker1 = new ImageBrush(new BitmapImage(new Uri(@"Images\Bunker1.png", UriKind.Relative)));
+        ImageBrush sprite_Bunker2 = new ImageBrush(new BitmapImage(new Uri(@"Images\Bunker2.png", UriKind.Relative)));
+        ImageBrush sprite_Bunker3 = new ImageBrush(new BitmapImage(new Uri(@"Images\Bunker3.png", UriKind.Relative)));
+        ImageBrush sprite_Bunker4 = new ImageBrush(new BitmapImage(new Uri(@"Images\Bunker4.png", UriKind.Relative)));
+        ImageBrush sprite_Bunker5 = new ImageBrush(new BitmapImage(new Uri(@"Images\Bunker5.png", UriKind.Relative)));
 
         public Bunker(Canvas c, MainWindow w)
         {
@@ -77,7 +77,6 @@ namespace U4_SpaceInvaders
         }
     }
 }
-
 
 
 

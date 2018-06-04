@@ -30,8 +30,8 @@ namespace U4_SpaceInvaders
         Random r = new Random(1);
 
         //Create Sprites
-        ImageBrush sprite_SP3alien = new ImageBrush(new BitmapImage(new Uri("Alien SP3.png", UriKind.Relative)));
-        ImageBrush sprite_LittleRed = new ImageBrush(new BitmapImage(new Uri("Draconus.png", UriKind.Relative)));
+        ImageBrush sprite_SP3alien = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP3.png", UriKind.Relative)));
+        ImageBrush sprite_LittleRed = new ImageBrush(new BitmapImage(new Uri(@"Images\Draconus.png", UriKind.Relative)));
 
         public SP3Aliens(Canvas c, MainWindow w)
         {

@@ -28,8 +28,8 @@ namespace U4_SpaceInvaders
 
 
         //Create Sprites
-        ImageBrush sprite_SP4alien = new ImageBrush(new BitmapImage(new Uri("Alien SP4.png", UriKind.Relative)));
-        ImageBrush sprite_BigRed = new ImageBrush(new BitmapImage(new Uri("Draxxor.png", UriKind.Relative)));
+        ImageBrush sprite_SP4alien = new ImageBrush(new BitmapImage(new Uri(@"Images\Alien SP4.png", UriKind.Relative)));
+        ImageBrush sprite_BigRed = new ImageBrush(new BitmapImage(new Uri(@"Images\Draxxor.png", UriKind.Relative)));
 
         public SP4Aliens(Canvas c, MainWindow w)
         {
